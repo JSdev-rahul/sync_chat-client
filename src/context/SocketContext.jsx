@@ -9,13 +9,14 @@ export const useSocket = () => {
 };
 
 export const SocketProvider = ({ children }) => {
+  const SOCKET_BASE_URL=import.meta.VITE_SOCKET_BASE_URL
   const socketRef = useRef();
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     console.log("User from state:", user); // Debugging user object
 
-    socketRef.current = io("http://localhost:3001", {
+    socketRef.current = io(SOCKET_BASE_URL, {
       query: { userId: user?._id },
     });
 
