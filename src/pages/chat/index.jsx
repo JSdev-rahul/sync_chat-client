@@ -70,7 +70,7 @@ const Chat = () => {
       socket.current.on("editMessageResponse", (resp) => {
         if (resp) {
           if (resp?.senderId == user?._id) {
-            showToast("success", "Message Deleted", "deleted");
+            showToast("info", "Your message has been edited", "edited");
           }
           // Update messages state with the response from the server
           setMessages((prevMessages) =>
@@ -112,11 +112,12 @@ const Chat = () => {
   });
 
   const handleEditMessage = (msg) => {
-    console.log("message", msg);
+    setEditMessageData("");
+    setMessage("");
     const updatedMessage = { ...msg, content: message };
     socket.current.emit("editMessage", { updatedMessage });
-    setMessage("");
-    setEditMessageData("");
+   
+   
   };
 
   return (
