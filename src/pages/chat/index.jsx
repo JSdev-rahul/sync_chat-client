@@ -16,8 +16,10 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const socket = useSocket();
 
-  const receiverId = selectedUser?.id;
+  const receiverId = selectedUser?._id;
   const senderId = user?._id;
+
+  console.log("selectedUser", selectedUser);
 
   useEffect(() => {
     if (socket && receiverId) {
@@ -116,8 +118,6 @@ const Chat = () => {
     setMessage("");
     const updatedMessage = { ...msg, content: message };
     socket.current.emit("editMessage", { updatedMessage });
-   
-   
   };
 
   return (

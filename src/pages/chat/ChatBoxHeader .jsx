@@ -15,8 +15,10 @@ const ChatBoxHeader = ({ selectedUser }) => {
             </div>
           </div>
           <div>
-            <h1>{selectedUser.firstName}</h1>
+            <h1>{selectedUser?.firstName} {selectedUser?.lastName}</h1>
             <div className="text-sm text-gray-400">{selectedUser?.lastSeen}</div>
+            <div className="text-sm text-gray-400">{selectedUser?.email}</div>
+
           </div>
         </div>
       ) : null}
