@@ -4,6 +4,7 @@ import { friendsAsyncThunk } from "@/redux/asyncThunk/friends.asyncThunk";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { Button } from "@/components/ui/button";
 import showToast from "../../../../../utils/toaster";
+import FriendRequestPage from "../friendRequest";
 
 const ContactContainer = React.memo(({ setSelectedUser }) => {
   const dispatch = useDispatch();
@@ -110,6 +111,7 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
   };
   return (
     <div className="text-white text-opacity-90 border-b-2 p-4 flex flex-col">
+      
       <div className="w-80 mb-7">
         <ReactSearchAutocomplete
           className=""

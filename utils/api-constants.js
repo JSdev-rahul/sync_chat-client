@@ -9,6 +9,10 @@ const API_CONFIG = {
   GET_FRIENDS_LIST: "/friends/getFriends/:userId",
 
   ADD_FRIEND: "/friends/add",
+
+  // friend Request
+  GET_ALL_FRIEND_REQUEST:'/friendRequest/getAllFriendRequest/:userId',
+  UPDATE_FRIEND_REQUEST_STATUS:"/friendRequest/updateStatus/:friendRequestId"
 };
 const API_ENDPOINT = {
   // User Authentication Endpoints
@@ -20,6 +24,8 @@ const API_ENDPOINT = {
   GET_FRIENDS_LIST: API_CONFIG.GET_FRIENDS_LIST,
   SEARCH_FRIENDS: API_CONFIG.SEARCH_FRIENDS,
   ADD_FRIEND: API_CONFIG.ADD_FRIEND,
+  GET_ALL_FRIEND_REQUEST:API_CONFIG.GET_ALL_FRIEND_REQUEST,
+  UPDATE_FRIEND_REQUEST_STATUS:API_CONFIG.UPDATE_FRIEND_REQUEST_STATUS
 };
 
 export default API_ENDPOINT;

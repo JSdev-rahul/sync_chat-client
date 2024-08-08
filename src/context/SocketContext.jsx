@@ -9,7 +9,7 @@ export const useSocket = () => {
 };
 
 export const SocketProvider = ({ children }) => {
-  const SOCKET_BASE_URL=import.meta.env.VITE_SOCKET_BASE_URL
+  const SOCKET_BASE_URL= import.meta.env.VITE_SOCKET_BASE_URL
   console.log("SOCKET_BASE_URL",SOCKET_BASE_URL);
   const socketRef = useRef();
   const { user } = useSelector((state) => state.auth);

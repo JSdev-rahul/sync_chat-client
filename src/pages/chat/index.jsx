@@ -7,6 +7,7 @@ import EmptyChatContainer from "./component/emptyChat-container";
 import Logo from "./component/Logo";
 import showToast from "../../../utils/toaster";
 import ChatBoxHeader from "./ChatBoxHeader ";
+import FriendRequestPage from "./component/friendRequest";
 
 const Chat = () => {
   const [editMesssageData, setEditMessageData] = useState("");
@@ -127,11 +128,14 @@ const Chat = () => {
         <div>
           <Logo />
         </div>
-        <div className="flex self-start">
-          <h2 className="text-white text-lg font-semibold mb-4 mt-6">
-            # My Contacts {user?.email}
-          </h2>
-        </div>
+        <div className="flex flex-col justify-center">
+      <h2 className="text-white text-lg font-semibold mb-4 mt-6 flex items-center space-x-4">
+        <span># My Contacts</span>
+        <FriendRequestPage />
+       
+      </h2>
+      <span className="text-gray-300">{user?.email}</span>
+    </div>
         <div className="flex flex-start">
           <ContactContainer setSelectedUser={setSelectedUser} />
         </div>
