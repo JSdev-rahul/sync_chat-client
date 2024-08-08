@@ -6,29 +6,16 @@ import { Button } from "@/components/ui/button";
 import showToast from "../../../../../utils/toaster";
 import FriendRequestPage from "../friendRequest";
 
-const ContactContainer = React.memo(({ setSelectedUser }) => {
+const ContactContainer = React.memo(({ setSelectedUser,getFriendsListHandler }) => {
   const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
   const { user } = useSelector((state) => state.auth);
   const { friendsList } = useSelector((state) => state.friendsList);
 
-  const [params, setParams] = useState({
-    page: 1,
-    limit: 5,
-  });
   const [searchUserParams, setSearchUserParams] = useState({
     q: "",
     limit: 10,
   });
-
-  const getFriendsListHandler = () => {
-    dispatch(
-      friendsAsyncThunk.fetchFriendsList({
-        params,
-        userId: user?._id,
-      })
-    );
-  };
 
   const searchUsersHandler = () => {
     dispatch(
@@ -46,10 +33,6 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
         console.log("err");
       });
   };
-
-  useEffect(() => {
-    getFriendsListHandler();
-  }, []);
 
   useEffect(() => {
     if (searchUserParams.q.length > 0) {
@@ -111,7 +94,6 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
   };
   return (
     <div className="text-white text-opacity-90 border-b-2 p-4 flex flex-col">
-      
       <div className="w-80 mb-7">
         <ReactSearchAutocomplete
           className=""

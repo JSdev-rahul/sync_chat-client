@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSocket } from "../../context/SocketContext"; // Adjust the path according to your file structure
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ChatContainer from "./component/chat-container";
 import ContactContainer from "./component/contact-container";
 import EmptyChatContainer from "./component/emptyChat-container";
@@ -8,6 +8,7 @@ import Logo from "./component/Logo";
 import showToast from "../../../utils/toaster";
 import ChatBoxHeader from "./ChatBoxHeader ";
 import FriendRequestPage from "./component/friendRequest";
+import { friendsAsyncThunk } from "@/redux/asyncThunk/friends.asyncThunk";
 
 const Chat = () => {
   const [editMesssageData, setEditMessageData] = useState("");
@@ -16,11 +17,9 @@ const Chat = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const socket = useSocket();
-
+  const dispatch=useDispatch()
   const receiverId = selectedUser?._id;
   const senderId = user?._id;
-
-  console.log("selectedUser", selectedUser);
 
   useEffect(() => {
     if (socket && receiverId) {
@@ -120,7 +119,19 @@ const Chat = () => {
     const updatedMessage = { ...msg, content: message };
     socket.current.emit("editMessage", { updatedMessage });
   };
-
+  const [params, setParams] = useState({
+    page: 1,
+    limit: 5,
+  });
+  const getFriendsListHandler = () => {
+    console.log("getFriendListHandlerrunn");
+    dispatch(
+      friendsAsyncThunk.fetchFriendsList({
+        params,
+        userId: user?._id,
+      })
+    );
+  };
   return (
     <div className="flex w-[100vw] h-[100vh]">
       <div className="bg-gray-800 w-96 border-r-2 border-gray-600 flex flex-col items-center p-4">
@@ -131,13 +142,13 @@ const Chat = () => {
         <div className="flex flex-col justify-center">
       <h2 className="text-white text-lg font-semibold mb-4 mt-6 flex items-center space-x-4">
         <span># My Contacts</span>
-        <FriendRequestPage />
+        <FriendRequestPage getFriendsListHandler={getFriendsListHandler} />
        
       </h2>
       <span className="text-gray-300">{user?.email}</span>
     </div>
         <div className="flex flex-start">
-          <ContactContainer setSelectedUser={setSelectedUser} />
+          <ContactContainer setSelectedUser={setSelectedUser} getFriendsListHandler={getFriendsListHandler} />
         </div>
       </div>
 

@@ -1,10 +1,15 @@
 import { FcCheckmark } from "react-icons/fc";
 import { RxCross2 } from "react-icons/rx";
 
-const FriendRequestList = ({ friendsRequest, updateFriendRequestStatus }) => {
+const FriendRequestList = ({
+  friendsRequest,
+  updateFriendRequestStatus,
+  acceptFriendRequest,
+  type,
+}) => {
   return friendsRequest?.map((item) => {
-    console.log(("item",item));
     const { friendRequestDetails } = item;
+    console.log(item);
     return (
       <div
         key={friendRequestDetails.id}
@@ -30,15 +35,20 @@ const FriendRequestList = ({ friendsRequest, updateFriendRequestStatus }) => {
         </div>
         <div className="flex gap-5">
           <div className="bg-white rounded-full p-1 text-white shadow-2xl hover:scale-125">
-            <FcCheckmark />
+            <FcCheckmark
+              onClick={() =>
+                acceptFriendRequest(friendRequestDetails?._id, item?._id)
+              }
+            />
           </div>
-
-          <div
-            onClick={() => updateFriendRequestStatus(item?._id)}
-            className="bg-red-500 rounded-full p-1 text-white shadow-2xl hover:scale-125"
-          >
-            <RxCross2 />
-          </div>
+          {type == "pending" ? (
+            <div
+              onClick={() => updateFriendRequestStatus(item?._id)}
+              className="bg-red-500 rounded-full p-1 text-white shadow-2xl hover:scale-125"
+            >
+              <RxCross2 />
+            </div>
+          ) : null}
         </div>
       </div>
     );

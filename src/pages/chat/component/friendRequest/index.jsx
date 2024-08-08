@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { friendRequestAsyncThunk } from "@/redux/asyncThunk/friendRequest.asyncThunk";
 import showToast from "../../../../../utils/toaster";
 
-const FriendRequestPage = () => {
+const FriendRequestPage = ({getFriendsListHandler}) => {
   const [isLoading, setIsLoading] = useState("");
   const [friendsRequest, setFriendRequest] = useState([]);
   const { user } = useSelector((state) => state?.auth);
@@ -43,11 +43,11 @@ const FriendRequestPage = () => {
     fetchMyFriendRequests();
   }, [params]);
 
-  const updateFriendRequestStatus = (id) => {
+  const updateFriendRequestStatus = (id,status='decline') => {
     dispatch(
       friendRequestAsyncThunk.updateFriendRequestStatus({
         friendRequestId: id,
-        status: "decline",
+        status,
       })
     )
       .unwrap()
@@ -56,8 +56,21 @@ const FriendRequestPage = () => {
         fetchMyFriendRequests();
       })
       .catch((err) => {
-        console.log("err",err);
+        console.log("err", err);
       });
+  };
+  const acceptFriendRequest = (friendId,friendReqeustId) => {
+    dispatch(
+      friendRequestAsyncThunk.acceptFriendRequest({
+        userId: user?._id,
+        friends: [friendId],
+      })
+    ).then(()=>{
+      updateFriendRequestStatus(friendReqeustId,'accept')
+      getFriendsListHandler()
+    }).catch((err)=>{
+      console.log("err",err);
+    });
   };
 
   return (
@@ -69,6 +82,7 @@ const FriendRequestPage = () => {
         setParams={setParams}
         fetchMyFriendRequests={fetchMyFriendRequests}
         updateFriendRequestStatus={updateFriendRequestStatus}
+        acceptFriendRequest={acceptFriendRequest}
       />
     </>
   );

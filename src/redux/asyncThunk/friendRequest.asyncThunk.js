@@ -23,13 +23,27 @@ class FriendRequestAsyncThunk {
   updateFriendRequestStatus = createAsyncThunk(
     "friendRequest/updateStatus",
     async (payload, { rejectWithValue }) => {
-      const { friendRequestId,status } = payload;
-      
+      const { friendRequestId, status } = payload;
+
       try {
         const endPoint = replaceUrl(API_ENDPOINT.UPDATE_FRIEND_REQUEST_STATUS, {
           friendRequestId,
         });
-        const response = await ApiClient.patch(endPoint, {status});
+        const response = await ApiClient.patch(endPoint, { status });
+        return response.data; // Assuming response.data contains the updated request information
+      } catch (err) {
+        return rejectWithValue(err.response?.data || err.message);
+      }
+    }
+  );
+  acceptFriendRequest = createAsyncThunk(
+    "friendRequest/accept",
+    async (payload, { rejectWithValue }) => {
+      try {
+        const response = await ApiClient.post(
+          API_ENDPOINT.ACCEPT_FRIEND_REQUEST,
+          payload
+        );
         return response.data; // Assuming response.data contains the updated request information
       } catch (err) {
         return rejectWithValue(err.response?.data || err.message);
