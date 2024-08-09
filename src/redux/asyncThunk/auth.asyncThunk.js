@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import ApiClient from "../../../utils/api-client";
 import API_ENDPOINT from "../../../utils/api-constants";
+import { replaceUrl } from "../constant/redux.constant";
 
 class AuthAsyncThunk {
   signUpAsyncThunk = createAsyncThunk(
@@ -18,9 +19,23 @@ class AuthAsyncThunk {
   loginAsyncThunk = createAsyncThunk(
     "auth/login",
     async (payload, { rejectWithValue }) => {
-      console.log("payload",payload)
+      console.log("payload", payload);
       try {
         const response = await ApiClient.post(API_ENDPOINT.LOGIN, payload);
+        return response.data; // Assuming response.data contains the user data and tokens
+      } catch (err) {
+        return rejectWithValue(err.response.data);
+      }
+    }
+  );
+  logOutAsyncThunk = createAsyncThunk(
+    "auth/logout",
+    async (payload, { rejectWithValue }) => {
+      const { userId } = payload;
+      
+      try {
+        const endPoint = replaceUrl(API_ENDPOINT.LOGOUT, { userId });
+        const response = await ApiClient.post(endPoint);
         return response.data; // Assuming response.data contains the user data and tokens
       } catch (err) {
         return rejectWithValue(err.response.data);

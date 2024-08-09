@@ -1,6 +1,7 @@
 const API_CONFIG = {
   SIGNUP: "/auth/signup",
   LOGIN: "/auth/login",
+  LOGOUT:"/auth/logout/:userId",
   CREATE_PROFILE: "/auth/profile",
 
   // user
@@ -19,6 +20,7 @@ const API_ENDPOINT = {
   // User Authentication Endpoints
   SIGNUP: API_CONFIG.SIGNUP,
   LOGIN: API_CONFIG.LOGIN,
+  LOGOUT:API_CONFIG.LOGOUT,
   CREATE_PROFILE: API_CONFIG.CREATE_PROFILE,
 
   // Friends Endpoints

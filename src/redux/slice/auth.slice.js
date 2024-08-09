@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { authAsyncThunk } from "../asyncThunk/auth.asyncThunk";
 import { RequestStatus } from "../constant/redux.constant";
+import { store } from "../store";
 
 const initialState = {
   status: RequestStatus.Idle,
@@ -16,14 +17,15 @@ const authSlice = createSlice({
   name: "auth/profile",
   initialState,
   reducers: {
-    // handleLogoutReducer: (state) => {
-    //   state.access_token = null
-    //   state.refresh_token = null
-    //   state.user = null
-    //   state.status = RequestStatus.Pending
-    //   localStorage.removeItem("persist:root")
-    //   googleLogout()
-    // },
+    handleLogoutReducer: (state) => {
+      console.log("state", state);
+      state.access_token = null;
+      state.refresh_token = null;
+      state.user = null;
+      state.status = RequestStatus.Pending;
+
+      localStorage.removeItem("persist:root");
+    },
     updateProfileReducer: (state, action) => {
       if (action?.payload) {
         state.user = action.payload.data;
@@ -51,5 +53,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { updateProfileReducer } = authSlice.actions;
+export const { updateProfileReducer, handleLogoutReducer } = authSlice.actions;
 export default authSlice.reducer;

@@ -12,7 +12,35 @@ const initialState = {
 const friendsListSlice = createSlice({
   name: "friends/friendsList",
   initialState,
-  reducers: {},
+  reducers: {
+    updateFriendStatus: (state, action) => {
+      console.log("action", action);
+
+      if (action?.payload) {
+        const { userId, isOnline, lastSeen } = action.payload; // Extract necessary data from payload
+
+        // Update the friends list
+        const updatedData = state.friendsList.map((item) => {
+          if (item.friendDetails._id === userId) {
+            // Update the friendDetails object with the new isOnline status
+            return {
+              ...item,
+              friendDetails: {
+                ...item.friendDetails,
+                isOnline: isOnline,
+                lastSeen: lastSeen && lastSeen,
+              },
+            };
+          } else {
+            return item;
+          }
+        });
+
+        // Update the state with the new friends list
+        state.friendsList = updatedData;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(friendsAsyncThunk.fetchFriendsList.pending, (state) => {
       state.status = RequestStatus.Pending;
@@ -30,5 +58,5 @@ const friendsListSlice = createSlice({
     });
   },
 });
-
+export const { updateFriendStatus } = friendsListSlice.actions;
 export default friendsListSlice.reducer;

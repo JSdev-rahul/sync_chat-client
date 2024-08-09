@@ -9,7 +9,10 @@ import showToast from "../../../utils/toaster";
 import ChatBoxHeader from "./ChatBoxHeader ";
 import FriendRequestPage from "./component/friendRequest";
 import { friendsAsyncThunk } from "@/redux/asyncThunk/friends.asyncThunk";
-
+import { updateFriendStatus } from "@/redux/slice/friendsList.slice";
+import { CiLogout } from "react-icons/ci";
+import { handleLogoutReducer } from "@/redux/slice/auth.slice";
+import { authAsyncThunk } from "@/redux/asyncThunk/auth.asyncThunk";
 const Chat = () => {
   const [editMesssageData, setEditMessageData] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
@@ -17,9 +20,16 @@ const Chat = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const socket = useSocket();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const receiverId = selectedUser?._id;
   const senderId = user?._id;
+
+  useEffect(() => {
+    socket.current.on("onlineStatus", (data) => {
+      console.log("Received online status:", data);
+      dispatch(updateFriendStatus(data));
+    });
+  }, [socket]);
 
   useEffect(() => {
     if (socket && receiverId) {
@@ -32,7 +42,6 @@ const Chat = () => {
         setMessages(allMessages);
       });
 
-      // Listen for incoming messages
       socket.current.on("receiveMessage", (newMessage) => {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       });
@@ -90,6 +99,7 @@ const Chat = () => {
           socket.current.off("receiveMessage");
           socket.current.off("messageDeleteResponse");
           socket.current.off("editMessageResponse");
+          socket.current.off("onlineStatus");
         }
       };
     }
@@ -132,6 +142,11 @@ const Chat = () => {
       })
     );
   };
+
+  useEffect(() => {
+    getFriendsListHandler();
+  }, []);
+
   return (
     <div className="flex w-[100vw] h-[100vh]">
       <div className="bg-gray-800 w-96 border-r-2 border-gray-600 flex flex-col items-center p-4">
@@ -140,15 +155,31 @@ const Chat = () => {
           <Logo />
         </div>
         <div className="flex flex-col justify-center">
-      <h2 className="text-white text-lg font-semibold mb-4 mt-6 flex items-center space-x-4">
-        <span># My Contacts</span>
-        <FriendRequestPage getFriendsListHandler={getFriendsListHandler} />
-       
-      </h2>
-      <span className="text-gray-300">{user?.email}</span>
-    </div>
-        <div className="flex flex-start">
-          <ContactContainer setSelectedUser={setSelectedUser} getFriendsListHandler={getFriendsListHandler} />
+          <h2 className="text-white text-lg font-semibold mb-4 mt-6 flex items-center space-x-4">
+            <span># My Contacts</span>
+            <FriendRequestPage getFriendsListHandler={getFriendsListHandler} />
+          </h2>
+          <span className="text-gray-300">{user?.email}</span>
+        </div>
+        <div className="">
+          <div className="flex flex-start">
+            <ContactContainer
+              setSelectedUser={setSelectedUser}
+              getFriendsListHandler={getFriendsListHandler}
+            />
+          </div>
+          <div
+            onClick={() => {
+              dispatch(authAsyncThunk.logOutAsyncThunk({ userId: user?._id }));
+              setTimeout(() => {
+                dispatch(handleLogoutReducer());
+              }, 100);
+            }}
+            className="text-white text-xl flex items-center gap-3 absolute bottom-3  left-[100px] cursor-pointer"
+          >
+            <CiLogout />
+            Logout
+          </div>
         </div>
       </div>
 
