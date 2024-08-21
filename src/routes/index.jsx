@@ -1,13 +1,14 @@
-import { Suspense } from "react";
-import { lazy } from "react";
-import PrivateRoute from "./privateRoutes";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { routeConfig } from "./routes";
+import { Suspense } from 'react';
+import { lazy } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+
+import PrivateRoute from './privateRoutes';
+import { routeConfig } from './routes';
 
 // Lazy-loaded components
-const Profile = lazy(() => import("../pages/profile"));
-const Auth = lazy(() => import("../pages/auth"));
-const Chat = lazy(() => import("../pages/chat"));
+const Profile = lazy(() => import('../pages/profile'));
+const Auth = lazy(() => import('../pages/auth'));
+const ChatInterface = lazy(() => import('../pages/chat-interface'));
 
 const AppRoutes = ({ isAuthenticated }) => {
   console.log(isAuthenticated);
@@ -25,13 +26,13 @@ const AppRoutes = ({ isAuthenticated }) => {
             </PrivateRoute>
           }
         >
-          {" "}
+          {' '}
         </Route>
         <Route
           path={routeConfig.chat}
           element={
             <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Chat />
+              <ChatInterface />
             </PrivateRoute>
           }
         ></Route>

@@ -1,21 +1,34 @@
-import React from "react";
-import { loginImage, victorySvg } from "@/assets";
-import { useFormik } from "formik";
-import { useState } from "react";
-// import { Loader2 } from "@/components/ui/icons"; // Ensure this import is correct for your loader component
-import ProfileInputs from "./profileInputs";
-import { userProfileValidation } from "../../../validation/profile.validation.js";
-import { useDispatch, useSelector } from "react-redux";
-import { authAsyncThunk } from "@/redux/asyncThunk/auth.asyncThunk";
-import showToast from "../../../utils/toaster";
-import { useNavigate } from "react-router-dom";
-import { updateProfileReducer } from "@/redux/slice/auth.slice";
-import { routeConfig } from "@/routes/routes";
-import { objectToFormData } from "../../../utils/formData";
+// React and Hooks
+import React, { useState } from 'react';
+// Redux and Thunks
+import { useDispatch } from 'react-redux';
+// Routing
+import { useNavigate } from 'react-router-dom';
+
+// Assets
+import { victorySvg } from '@/assets';
+// Constants
+import { ToastMessageKey } from '@/constant/index.js';
+// Hooks
+import { useUserDetails } from '@/hooks/useUserDetails.jsx';
+import { authAsyncThunk } from '@/redux/asyncThunk/auth.asyncThunk';
+import { updateProfileReducer } from '@/redux/slice/auth.slice';
+import { routeConfig } from '@/routes/routes';
+import { useFormik } from 'formik';
+
+// Validation
+import { userProfileValidation } from '../../validation/profile.validation.js';
+import { objectToFormData } from '../../utils/formData.js';
+// Utilities
+import { showErrorToast, showSuccessToast } from '../../utils/toaster.jsx';
+
+// Components
+import ProfileDetails from './ProfileDetails.jsx';
+
+const BASE_URL = import.meta.env.VITE_STATIC_IMAGE_BASE_URL;
+
 const Profile = () => {
-  const BASE_URL = import.meta.env.VITE_STATIC_IMAGE_BASE_URL;
-  const { user } = useSelector((state) => state.auth);
-  console.log();
+  const { user } = useUserDetails();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -24,23 +37,20 @@ const Profile = () => {
     email: user?.email,
     firstName: user?.firstName,
     lastName: user?.lastName,
-    avatar: "",
+    avatar: '',
   });
-  const handleSubmit = (values) => {
+
+  const handleSubmit = values => {
     const formData = objectToFormData(values);
-    // Log FormData keys and values
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
     dispatch(authAsyncThunk.createProfileAsyncThunk(formData))
       .unwrap()
-      .then((res) => {
+      .then(res => {
         dispatch(updateProfileReducer(res));
-        showToast("success", "Profile successfully created", "Success");
+        showSuccessToast(ToastMessageKey.PROFILE_CREATED);
         navigate(routeConfig.chat);
       })
-      .catch((err) => {
-        showToast("error", err?.message, "error");
+      .catch(err => {
+        showErrorToast(err?.message);
       })
       .finally(() => {
         setIsDisabled(false);
@@ -49,8 +59,9 @@ const Profile = () => {
 
   const formik = useFormik({
     initialValues: userProfile,
+    enableReinitialize: true,
     validationSchema: userProfileValidation,
-    onSubmit: (values) => {
+    onSubmit: values => {
       handleSubmit(values);
     },
   });
@@ -63,29 +74,22 @@ const Profile = () => {
             <div className="flex items-center justify-center flex-col">
               <div className="flex items-center justify-center">
                 <h1 className="text-5xl font-bold md:text-6xl">WelCome</h1>
-                <img
-                  className="h-[100px]"
-                  alt="victory"
-                  loading="lazy"
-                  src={victorySvg}
-                ></img>
+                <img className="h-[100px]" alt="victory" loading="lazy" src={victorySvg}></img>
               </div>
-              <p className="font-medium text-center">
-                Complete your profile to explore the app
-              </p>
+              <p className="font-medium text-center">Complete your profile to explore the app</p>
             </div>
           )}
 
           <div className="ml-10 w-full">
             <form onSubmit={formik.handleSubmit}>
-              <ProfileInputs formik={formik} isDisabled={isDisabled} />
+              <ProfileDetails formik={formik} isDisabled={isDisabled} />
             </form>
           </div>
         </div>
         {user?.avatar && (
           <div className="hidden xl:flex justify-center items-center">
             <img
-              className="w-80 h-80 rounded-full object-cover"
+              className="w-80 h-80 rounded-full object-cover border border-1 border-blue-400"
               src={`${BASE_URL}${user.avatar}`}
             ></img>
           </div>

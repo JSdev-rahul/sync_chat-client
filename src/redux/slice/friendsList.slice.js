@@ -1,8 +1,8 @@
 /* eslint-disable */
+import { createSlice } from '@reduxjs/toolkit';
 
-import { createSlice } from "@reduxjs/toolkit";
-import { RequestStatus } from "../constant/redux.constant";
-import { friendsAsyncThunk } from "../asyncThunk/friends.asyncThunk";
+import { friendsAsyncThunk } from '../asyncThunk/friends.asyncThunk';
+import { RequestStatus } from '../constant/redux.constant';
 
 const initialState = {
   status: RequestStatus.Idle,
@@ -10,17 +10,17 @@ const initialState = {
 };
 
 const friendsListSlice = createSlice({
-  name: "friends/friendsList",
+  name: 'friends/friendsList',
   initialState,
   reducers: {
     updateFriendStatus: (state, action) => {
-      console.log("action", action);
+      console.log('action', action);
 
       if (action?.payload) {
         const { userId, isOnline, lastSeen } = action.payload; // Extract necessary data from payload
 
         // Update the friends list
-        const updatedData = state.friendsList.map((item) => {
+        const updatedData = state.friendsList.map(item => {
           if (item.friendDetails._id === userId) {
             // Update the friendDetails object with the new isOnline status
             return {
@@ -41,19 +41,16 @@ const friendsListSlice = createSlice({
       }
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(friendsAsyncThunk.fetchFriendsList.pending, (state) => {
+  extraReducers: builder => {
+    builder.addCase(friendsAsyncThunk.fetchFriendsList.pending, state => {
       state.status = RequestStatus.Pending;
     });
-    builder.addCase(
-      friendsAsyncThunk.fetchFriendsList.fulfilled,
-      (state, action) => {
-        console.log(action.payload.data);
-        state.status = RequestStatus.Fulfilled;
-        state.friendsList = action.payload.data; // Access user property from payload
-      }
-    );
-    builder.addCase(friendsAsyncThunk.fetchFriendsList.rejected, (state) => {
+    builder.addCase(friendsAsyncThunk.fetchFriendsList.fulfilled, (state, action) => {
+      console.log(action.payload.data);
+      state.status = RequestStatus.Fulfilled;
+      state.friendsList = action.payload.data; // Access user property from payload
+    });
+    builder.addCase(friendsAsyncThunk.fetchFriendsList.rejected, state => {
       state.status = RequestStatus.Rejected;
     });
   },

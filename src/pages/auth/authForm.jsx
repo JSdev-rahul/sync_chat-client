@@ -1,11 +1,13 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import PropTypes from "prop-types";
-import { Loader2 } from "lucide-react";
+import React from 'react';
 
-const AuthForm = ({ formik, formType, isDisabled }) => {
-  const renderError = (field) => {
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { FormType } from '@/constant';
+import { Loader2 } from 'lucide-react';
+
+const AuthForm = ({ formik, currentFormType, isDisabled }) => {
+  
+  const renderError = field => {
     return formik.touched[field] && formik.errors[field] ? (
       <span className="text-xs text-red-500">*{formik.errors[field]}</span>
     ) : null;
@@ -25,7 +27,7 @@ const AuthForm = ({ formik, formType, isDisabled }) => {
             onBlur={formik.handleBlur}
             value={formik.values.email}
           />
-          {renderError("email")}
+          {renderError('email')}
         </div>
 
         <div>
@@ -39,10 +41,10 @@ const AuthForm = ({ formik, formType, isDisabled }) => {
             onBlur={formik.handleBlur}
             value={formik.values.password}
           />
-          {renderError("password")}
+          {renderError('password')}
         </div>
 
-        {formType === "SignUp" && (
+        {currentFormType === FormType.SIGN_UP && (
           <div>
             <Input
               placeholder="Confirm Password"
@@ -54,28 +56,16 @@ const AuthForm = ({ formik, formType, isDisabled }) => {
               onBlur={formik.handleBlur}
               value={formik.values.confirmPassword}
             />
-            {renderError("confirmPassword")}
+            {renderError('confirmPassword')}
           </div>
         )}
 
-        <Button
-          disabled={isDisabled}
-          type="submit"
-          className="rounded-full p-6 w-full"
-        >
-          {isDisabled ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : null}{" "}
-          {formType}
+        <Button disabled={isDisabled} type="submit" className="rounded-full p-6 w-full">
+          {isDisabled ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} {currentFormType}
         </Button>
       </div>
     </form>
   );
 };
-
-// AuthForm.propTypes = {
-//   formik: PropTypes.object.isRequired,
-//   formType: PropTypes.oneOf(['LogIn', 'SignUp']).isRequired,
-// };
 
 export default React.memo(AuthForm);

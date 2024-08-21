@@ -1,10 +1,9 @@
 /* eslint-disable */
+import { createSlice } from '@reduxjs/toolkit';
 
-import { createSlice } from "@reduxjs/toolkit";
-
-import { authAsyncThunk } from "../asyncThunk/auth.asyncThunk";
-import { RequestStatus } from "../constant/redux.constant";
-import { store } from "../store";
+import { authAsyncThunk } from '../asyncThunk/auth.asyncThunk';
+import { RequestStatus } from '../constant/redux.constant';
+import { store } from '../store';
 
 const initialState = {
   status: RequestStatus.Idle,
@@ -14,17 +13,17 @@ const initialState = {
 };
 
 const authSlice = createSlice({
-  name: "auth/profile",
+  name: 'auth/profile',
   initialState,
   reducers: {
-    handleLogoutReducer: (state) => {
-      console.log("state", state);
+    handleLogoutReducer: state => {
+      console.log('state', state);
       state.access_token = null;
       state.refresh_token = null;
       state.user = null;
       state.status = RequestStatus.Pending;
 
-      localStorage.removeItem("persist:root");
+      localStorage.removeItem('persist:root');
     },
     updateProfileReducer: (state, action) => {
       if (action?.payload) {
@@ -33,21 +32,18 @@ const authSlice = createSlice({
       return;
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(authAsyncThunk.loginAsyncThunk.pending, (state) => {
+  extraReducers: builder => {
+    builder.addCase(authAsyncThunk.loginAsyncThunk.pending, state => {
       state.status = RequestStatus.Pending;
     });
-    builder.addCase(
-      authAsyncThunk.loginAsyncThunk.fulfilled,
-      (state, action) => {
-        console.log(action.payload);
-        state.status = RequestStatus.Fulfilled;
-        state.user = action.payload.data; // Access user property from payload
-        state.access_token = action.payload.accessToken;
-        state.refresh_token = action.payload.refreshToken;
-      }
-    );
-    builder.addCase(authAsyncThunk.loginAsyncThunk.rejected, (state) => {
+    builder.addCase(authAsyncThunk.loginAsyncThunk.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.status = RequestStatus.Fulfilled;
+      state.user = action.payload.data; // Access user property from payload
+      state.access_token = action.payload.accessToken;
+      state.refresh_token = action.payload.refreshToken;
+    });
+    builder.addCase(authAsyncThunk.loginAsyncThunk.rejected, state => {
       state.status = RequestStatus.Rejected;
     });
   },

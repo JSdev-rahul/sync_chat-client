@@ -1,7 +1,6 @@
-import loginImage from './login2.png'
-import victorySvg from './victory.svg'
-import emptyMessageLottie from './lottie-json.json'
+import loginImage from './login2.png';
+import emptyMessageLottie from './lottie-json.json';
+import crossIconSvg from './svg/crossIcon.svg';
+import victorySvg from './victory.svg';
 
-import crossIconSvg from './svg/crossIcon.svg'
-
-export {loginImage,victorySvg,emptyMessageLottie,crossIconSvg}
+export { loginImage, victorySvg, emptyMessageLottie, crossIconSvg };

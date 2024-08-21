@@ -1,12 +1,13 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import ApiClient from "../../../utils/api-client";
-import API_ENDPOINT from "../../../utils/api-constants";
-import { replaceUrl } from "../constant/redux.constant";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import ApiClient from '../../lib/api-client';
+import API_ENDPOINT from '../../lib/api-constants';
+import { replaceUrl } from '../constant/redux.constant';
 
 class FriendRequestAsyncThunk {
   // Fetch friends list with pagination
   fetchFriendRequest = createAsyncThunk(
-    "friendRequest/fetchList",
+    'friendRequest/fetchList',
     async (payload, { rejectWithValue }) => {
       const { userId, params } = payload;
       try {
@@ -18,10 +19,10 @@ class FriendRequestAsyncThunk {
       } catch (err) {
         return rejectWithValue(err.response?.data || err.message);
       }
-    }
+    },
   );
   updateFriendRequestStatus = createAsyncThunk(
-    "friendRequest/updateStatus",
+    'friendRequest/updateStatus',
     async (payload, { rejectWithValue }) => {
       const { friendRequestId, status } = payload;
 
@@ -34,21 +35,18 @@ class FriendRequestAsyncThunk {
       } catch (err) {
         return rejectWithValue(err.response?.data || err.message);
       }
-    }
+    },
   );
   acceptFriendRequest = createAsyncThunk(
-    "friendRequest/accept",
+    'friendRequest/accept',
     async (payload, { rejectWithValue }) => {
       try {
-        const response = await ApiClient.post(
-          API_ENDPOINT.ACCEPT_FRIEND_REQUEST,
-          payload
-        );
+        const response = await ApiClient.post(API_ENDPOINT.ACCEPT_FRIEND_REQUEST, payload);
         return response.data; // Assuming response.data contains the updated request information
       } catch (err) {
         return rejectWithValue(err.response?.data || err.message);
       }
-    }
+    },
   );
   // Search for friends based on a query
 

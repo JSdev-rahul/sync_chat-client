@@ -30,8 +30,8 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
   }
-  .dYrfwz > input{
-    font-size: "20px";
+  .dYrfwz > input {
+    font-size: '20px';
   }
   .dark {
     --background: 222.2 84% 4.9%;
@@ -70,6 +70,30 @@
   }
 }
 
-.dYrfwz > input{
-  font-size: "20px";
+.dYrfwz > input {
+  font-size: '20px';
+}
+
+
+/* Scrollbar container */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 12px; /* Height of the scrollbar (horizontal) */
+}
+
+/* Scrollbar track (part that the thumb moves along) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+/* Scrollbar thumb (part that you drag) */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the thumb */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+/* Scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Darker color of the thumb on hover */
 }

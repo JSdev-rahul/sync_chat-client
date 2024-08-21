@@ -1,13 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import "./index.css";
-import { Toaster } from "@/components/ui/toaster";
-import { Provider } from "react-redux";
-import { store } from "./redux/store.js";
-import { SocketProvider } from "./context/SocketContext.jsx";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+import { Toaster } from '@/components/ui/toaster';
+
+import App from './App.jsx';
+import { SocketProvider } from './context/SocketContext.jsx';
+import './index.css';
+import { store } from './redux/store.js';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <>
     <Provider store={store}>
       <SocketProvider>
@@ -16,5 +18,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </Provider>
 
     <Toaster />
-  </>
+  </>,
 );
