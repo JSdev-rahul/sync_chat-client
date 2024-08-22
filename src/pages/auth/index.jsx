@@ -28,6 +28,7 @@ const Auth = () => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const [formValues, setFormValues] = useState({
+    userName:"",
     email: '',
     password: '',
     confirmPassword: '',
@@ -47,13 +48,9 @@ const Auth = () => {
 
     dispatch(dispatchType(values))
       .unwrap()
-      .then(res => {
+      .then(() => {
         showSuccessToast(successMessage);
-        if (res.data.profileSetup) {
           navigate(routeConfig.chat);
-        } else {
-          navigate(routeConfig.profile);
-        }
       })
       .catch(err => {
         const message = err.message || errorMessage;

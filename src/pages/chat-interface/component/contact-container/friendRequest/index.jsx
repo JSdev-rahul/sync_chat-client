@@ -35,7 +35,7 @@ const FriendRequestPage = ({ fetchFriendListHandler }) => {
         await delay(3000);
         setIsLoading(false);
       });
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     fetchFriendRequests();

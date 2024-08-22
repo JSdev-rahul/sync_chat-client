@@ -20,13 +20,22 @@ const PopoverDemo = React.memo(
     return (
       <Popover.Root className="w-96 h-12">
         <Popover.Trigger asChild>
-          <button
-            onClick={() => fetchFriendRequests()}
-            aria-label="Update dimensions"
-            class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg hover:underline underline-offset-2 shadow-sm"
-          >
-            New Request
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => fetchFriendRequests()}
+              aria-label="Update dimensions"
+              class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg hover:underline underline-offset-2 shadow-sm"
+            >
+              New Request
+            </button>
+
+             { friendsRequests?.length>=1 && ( 
+              <span className="absolute top-3 right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+              </span>)
+            }
+          </div>
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Content
@@ -92,9 +101,9 @@ const PopoverDemo = React.memo(
                   value={FriendRequestType.PENDING}
                 >
                   <FriendRequestList
-                    // friendsRequests={friendsRequests}
+                    friendsRequests={friendsRequests}
                     requestType={FriendRequestType.PENDING}
-                    // fetchFriendRequests={fetchFriendRequests}
+                    fetchFriendRequests={fetchFriendRequests}
                     fetchFriendListHandler={fetchFriendListHandler}
                   />
                 </Tabs.Content>
@@ -104,8 +113,8 @@ const PopoverDemo = React.memo(
                 >
                   <FriendRequestList
                     requestType={FriendRequestType.DECLINED}
-                    // friendsRequests={friendsRequests}
-                    // fetchFriendRequests={fetchFriendRequests}
+                    friendsRequests={friendsRequests}
+                    fetchFriendRequests={fetchFriendRequests}
                     fetchFriendListHandler={fetchFriendListHandler}
                   />
                 </Tabs.Content>

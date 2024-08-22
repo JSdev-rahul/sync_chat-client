@@ -37,31 +37,18 @@ const ProfileDetails = ({ formik, isDisabled }) => {
       <div>
         <Input
           disabled={user?.profileSetup}
-          placeholder="First Name"
+          placeholder="userName"
           type="text"
           className="rounded-full p-6"
-          id="firstName"
-          name="firstName"
+          id="userName"
+          name="userName"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.firstName}
+          value={formik.values.userName}
         />
-        {renderError('firstName')}
+        {renderError('userName')}
       </div>
-      <div>
-        <Input
-          disabled={user?.profileSetup}
-          placeholder="Last Name"
-          type="text"
-          className="rounded-full p-6"
-          id="lastName"
-          name="lastName"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.lastName}
-        />
-        {renderError('lastName')}
-      </div>
+
       <div>
         <Input
           placeholder="Avatar URL"
@@ -74,11 +61,10 @@ const ProfileDetails = ({ formik, isDisabled }) => {
         />
         {renderError('avatar')}
       </div>
-      {user?.profileSetup ? null : (
-        <Button disabled={isDisabled} type="submit" className="rounded-full p-6 w-full">
-          {isDisabled ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Submit
-        </Button>
-      )}
+
+      <Button disabled={isDisabled} type="submit" className="rounded-full p-6 w-full">
+        {isDisabled ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Submit
+      </Button>
     </div>
   );
 };

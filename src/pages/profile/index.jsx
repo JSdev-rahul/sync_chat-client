@@ -35,8 +35,7 @@ const Profile = () => {
 
   const [userProfile, setUserProfile] = useState({
     email: user?.email,
-    firstName: user?.firstName,
-    lastName: user?.lastName,
+    userName:user?.userName,
     avatar: '',
   });
 
@@ -70,15 +69,13 @@ const Profile = () => {
     <div className="h-[100vh] w-[100vw] flex items-center justify-center overflow-auto">
       <div className="h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2">
         <div className="flex flex-col gap-10 items-center justify-center">
-          {user?.profileSetup ? null : (
-            <div className="flex items-center justify-center flex-col">
-              <div className="flex items-center justify-center">
-                <h1 className="text-5xl font-bold md:text-6xl">WelCome</h1>
-                <img className="h-[100px]" alt="victory" loading="lazy" src={victorySvg}></img>
-              </div>
-              <p className="font-medium text-center">Complete your profile to explore the app</p>
+          <div className="flex items-center justify-center flex-col">
+            <div className="flex items-center justify-center">
+              <h1 className="text-5xl font-bold md:text-6xl">WelCome</h1>
+              <img className="h-[100px]" alt="victory" loading="lazy" src={victorySvg}></img>
             </div>
-          )}
+            <p className="font-medium text-center">Complete your profile to explore the app</p>
+          </div>
 
           <div className="ml-10 w-full">
             <form onSubmit={formik.handleSubmit}>

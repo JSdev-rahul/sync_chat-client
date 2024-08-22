@@ -15,6 +15,22 @@ const AuthForm = ({ formik, currentFormType, isDisabled }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="flex flex-col gap-5 mt-10">
+        {currentFormType === FormType.SIGN_UP && (
+          <div>
+            <Input
+              placeholder="userName"
+              type="userName"
+              className="rounded-full p-6"
+              id="userName"
+              name="userName"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.userName}
+            />
+            {renderError('userName')}
+          </div>
+        )}
+
         <div>
           <Input
             placeholder="Email"

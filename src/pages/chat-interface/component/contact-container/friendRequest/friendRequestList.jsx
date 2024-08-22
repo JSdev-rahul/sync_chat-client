@@ -8,11 +8,12 @@ import { friendRequestAsyncThunk } from '@/redux/asyncThunk/friendRequest.asyncT
 import { showErrorToast, showSuccessToast } from '@/utils/toaster';
 
 const FriendRequestList = ({
-  friendsRequest,
+  friendsRequests,
   requestType,
   fetchFriendRequests,
   fetchFriendListHandler,
 }) => {
+  console.log("friendsRequest",friendsRequests);
   const dispatch = useDispatch();
   const { user } = useUserDetails();
   const userId = user._id;
@@ -39,25 +40,21 @@ const FriendRequestList = ({
       });
   };
 
-  return friendsRequest?.map(item => {
-    const { firstName, lastName, _id } = item?.friendRequestDetails;
+  return friendsRequests?.map(item => {
+     
+
+    const { userName,email, _id } = item?.friendRequestDetails;
     return (
       <div
         key={_id}
         className="flex items-center justify-between mb-4 gap-5 cursor-pointer hover:bg-gray-100 border-b-2"
       >
         <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center text-black">
-          <div className="text-lg font-semibold">
-            {' '}
-            {firstName[0].toUpperCase()}
-            {lastName[0].toUpperCase()}
-          </div>
+          <div className="text-lg font-semibold rounded-full"> {userName[0]?.toUpperCase()}</div>
         </div>
         <div>
-          <div className="font-semibold">
-            {firstName} {lastName}
-          </div>
-          <div className="text-sm text-gray-400">{lastSeen}</div>
+          <div className="font-semibold">{userName}</div>
+      
           <div className="text-sm text-gray-400">{email}</div>
         </div>
         <div className="flex gap-5">

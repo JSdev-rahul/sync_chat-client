@@ -26,6 +26,7 @@ const ChatInterface = () => {
 
   useEffect(() => {
     socket.current.on('onlineStatus', data => {
+      console.log("@@@ onlineStatus",data);
       dispatch(updateFriendStatus(data));
     });
   }, [socket]);
@@ -94,7 +95,7 @@ const ChatInterface = () => {
       </div>
 
       {/* Chat Area */}
-      <div className="flex flex-col overflow-hidden h-full w-auto ml-2">
+      <div className="flex flex-col gap-3 overflow-hidden h-full w-auto ml-2">
         {/* Header */}
         {selectedUser && (
           <div className="flex-none overflow-hidden mb-2 rounded-2xl">
@@ -115,21 +116,7 @@ const ChatInterface = () => {
         <div className="flex-none">{/* Place your input component here */}</div>
       </div>
     </div>
-    //     <div className="grid grid-cols-[auto_1fr]  bg-slate-950 p-6">
-    //   <div className="bg-gray-800 border-r-2  border-gray-600 rounded-3xl">
-    //     <div className="p-4">
-    //       <ContactContainer {...{ setSelectedUser }} />
-    //     </div>
-    //   </div>
-    //   <div className="overflow-hidden">
-
-    //     {selectedUser ? (
-    //       <ChatContainer {...{ selectedUser, Allmessages }} />
-    //     ) : (
-    //       <EmptyChatContainer />
-    //     )}
-    //   </div>
-    // </div>
+    
   );
 };
 

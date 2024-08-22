@@ -11,6 +11,7 @@ export const loginValidation = yup.object({
 
 // Validation schema for email and password
 export const signUpVlidation = yup.object({
+  userName:yup.string().required('User Name is required'),
   email: yup.string().email('Invalid email address').required('Email is required'),
   password: yup
     .string()

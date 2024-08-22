@@ -52,13 +52,13 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
     setSearchUserParams({ ...searchUserParams, q: query });
   }, []);
 
-  const formatResult = useCallback(data => {
-    const { name, lname, email = '' } = data;
+  const formatResult = (data)=> {
+    const { userName, email = '' } = data;
     return (
       <div className="flex items-center justify-between">
         <div className="flex flex-col cursor-pointer">
           <span className="text-lg font-semibold">
-            {name} {lname}
+            {userName}
           </span>
           <span className="text-sm text-gray-500">{email}</span>
         </div>
@@ -69,7 +69,7 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
         </div>
       </div>
     );
-  }, []);
+  };
 
   const handleOnSelect = useCallback(
     item => {
@@ -94,6 +94,7 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
     fetchFriendListHandler();
   });
 
+
   return (
     <>
       <div className="text-white text-opacity-90 border-b-2 p-4 flex flex-col">
@@ -108,17 +109,30 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
         <div className="w-80 my-4">
           <ReactSearchAutocomplete
             items={users}
-            styling={{
-              fontSize: '16px', // Font size for the result text
-              inputFontSize: '20px', // Font size for the input field text
-            }}
             inputDebounce={300}
             maxResults={10}
             showItemsOnFocus={false}
             onSearch={handleOnSearch}
             onSelect={handleOnSelect}
             formatResult={formatResult}
+            fuseOptions={{ keys: ["userName","email"] }}
             placeholder="Search user by name or email"
+            styling={{
+              height: "38px",
+              border: "1px solid darkgreen",
+              borderRadius: "20px",
+              backgroundColor: "white",
+              boxShadow: "none",
+              hoverBackgroundColor: "none",
+              color: "darkgreen",
+              fontSize: "16px",
+              // fontFamily: "Courier",
+              iconColor: "black",
+              lineColor: "black",
+              placeholderColor: "black",
+              clearIconMargin: "3px 8px 3px 0",
+              zIndex: 2,
+            }}
           />
         </div>
         <FriendsList setSelectedUser={setSelectedUser} />
