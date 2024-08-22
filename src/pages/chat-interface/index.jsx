@@ -9,6 +9,7 @@ import { useSocket } from '../../context/SocketContext';
 import { showSuccessToast } from '../../utils/toaster';
 
 import ChatContainer from './component/chat-container';
+import ChatBoxHeader from './component/chat-container/chatBoxHeader';
 import ContactContainer from './component/contact-container';
 import EmptyChatContainer from './component/emptyChat-container';
 
@@ -84,27 +85,44 @@ const ChatInterface = () => {
   }, [socket, receiverId]);
 
   return (
-    <div className="grid grid-cols-[auto_1fr] h-screen bg-slate-950 p-6">
-  <div className="bg-gray-800 border-r-2 border-gray-600 rounded-3xl">
-    <div className=" p-4">
-      <ContactContainer {...{ setSelectedUser }} />
+    <div className="grid grid-cols-[auto_1fr] bg-gradient-to-r from-indigo-500  h-screen p-6">
+      {/* Sidebar */}
+      <div className="bg-gray-800 border-r-2 border-gray-600 rounded-3xl h-full">
+        <div className="p-4 h-full">
+          <ContactContainer {...{ setSelectedUser }} />
+        </div>
+      </div>
+
+      {/* Chat Area */}
+      <div className="flex flex-col overflow-hidden h-full w-auto ml-2">
+        {/* Header */}
+        {selectedUser && (
+          <div className="flex-none overflow-hidden mb-2 rounded-2xl">
+            <ChatBoxHeader selectedUser={selectedUser} />
+          </div>
+        )}
+
+        {/* Messages */}
+        <div className="flex-grow overflow-y-hidden">
+          {selectedUser ? (
+            <ChatContainer {...{ selectedUser, Allmessages }} />
+          ) : (
+            <EmptyChatContainer />
+          )}
+        </div>
+
+        {/* Input Area */}
+        <div className="flex-none">{/* Place your input component here */}</div>
+      </div>
     </div>
-  </div>
-  <div className="overflow-hidden rounded-3xl ml-1">
-    {selectedUser ? (
-      <ChatContainer {...{ selectedUser, Allmessages }} />
-    ) : (
-      <EmptyChatContainer />
-    )}
-  </div>
-</div>
-    // <div className="flex w-full h-screen p-2 bg-slate-950">
-    //   <div className="bg-gray-800 w-96 border-r-2 border-gray-600 flex flex-col items-center p-4">
-    //     <div className="flex flex-start ">
+    //     <div className="grid grid-cols-[auto_1fr]  bg-slate-950 p-6">
+    //   <div className="bg-gray-800 border-r-2  border-gray-600 rounded-3xl">
+    //     <div className="p-4">
     //       <ContactContainer {...{ setSelectedUser }} />
     //     </div>
     //   </div>
-    //   <div className="flex-1">
+    //   <div className="overflow-hidden">
+
     //     {selectedUser ? (
     //       <ChatContainer {...{ selectedUser, Allmessages }} />
     //     ) : (

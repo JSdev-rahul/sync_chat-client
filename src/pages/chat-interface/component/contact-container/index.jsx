@@ -99,13 +99,13 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
       <div className="text-white text-opacity-90 border-b-2 p-4 flex flex-col">
         <Logo />
         <div className="flex flex-col justify-center">
-          <h2 className="text-white text-lg font-semibold mb-4 mt-6 flex items-center space-x-4">
+          <h2 className="text-white flex justify-between text-lg font-semibold mb-4 mt-6  items-center space-x-4">
             <span># My Contacts</span>
             <FriendRequestPage fetchFriendListHandler={fetchFriendListHandler} />
           </h2>
           <span className="text-gray-300">{user?.email}</span>
         </div>
-        <div className="w-80 mb-7">
+        <div className="w-80 my-4">
           <ReactSearchAutocomplete
             items={users}
             styling={{

@@ -93,25 +93,19 @@ const ChatContainer = ({ Allmessages, selectedUser }) => {
 
   return (
     <>
-      <div className="bg-gray-900 w-full flex flex-col p-11 ">
-        <div className="flex-1 overflow-y-auto">
-          <ChatBoxHeader selectedUser={selectedUser} />
-
-          <div className="relative flex flex-col h-screen bg-gray-900">
-            <div className="flex-1 overflow-y-auto p-4 mb-20">
-              {renderedMessages}
-              <div ref={endOfMessagesRef} /> {/* Empty div to act as a scroll target */}
-            </div>
-            <div>
-              <MessageActionBar
-                {...{
-                  editMessageData,
-                  setEditMessageData,
-                  selectedUser,
-                }}
-              />
-            </div>
-          </div>
+      <div className="flex flex-col h-full">
+        <div className="flex-1 overflow-y-auto p-4 bg-gray-900 mt-16 mb-9 rounded-3xl">
+          {renderedMessages}
+          <div ref={endOfMessagesRef} /> {/* Empty div to act as a scroll target */}
+        </div>
+        <div className="relative bg-gray-800 p-4 rounded-b-3xl">
+          <MessageActionBar
+            {...{
+              editMessageData,
+              setEditMessageData,
+              selectedUser,
+            }}
+          />
         </div>
       </div>
     </>

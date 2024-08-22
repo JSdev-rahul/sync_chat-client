@@ -21,9 +21,10 @@ const PopoverDemo = React.memo(
       <Popover.Root className="w-96 h-12">
         <Popover.Trigger asChild>
           <button
+            
             onClick={() => fetchFriendRequests()}
             aria-label="Update dimensions"
-            class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+            class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg hover:underline underline-offset-2 shadow-sm"
           >
             New Request
           </button>

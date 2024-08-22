@@ -1,45 +1,56 @@
-import { Suspense } from 'react';
-import { lazy } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+// import { lazy, Suspense } from 'react';
+import { Navigate, useRoutes } from 'react-router-dom';
 
 import PrivateRoute from './privateRoutes';
+import PublicRoute from './PublicRoute';
 import { routeConfig } from './routes';
+import { lazy, Suspense } from 'react';
 
 // Lazy-loaded components
 const Profile = lazy(() => import('../pages/profile'));
 const Auth = lazy(() => import('../pages/auth'));
 const ChatInterface = lazy(() => import('../pages/chat-interface'));
 
-const AppRoutes = ({ isAuthenticated }) => {
-  console.log(isAuthenticated);
+const AppRoutes = ({ token }) => {
+  // Define the route configuration
+  const routes = [
+    {
+      path: routeConfig.profile,
+      element: (
+        <PrivateRoute token={token}>
+          <Profile />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: routeConfig.chat,
+      element: (
+        <PrivateRoute token={token}>
+          <ChatInterface />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: routeConfig.auth,
+      element: (
+        <PublicRoute token={token}>
+          <Auth />
+        </PublicRoute>
+      ),
+    },
+    // Redirect unknown paths to /auth
+    {
+      path: '*',
+      element: <Navigate to={routeConfig.auth} />,
+    },
+  ];
+
+  // Use the useRoutes hook to generate the route elements
+  const element = useRoutes(routes);
+
   return (
     <Suspense fallback={<h1>Loading...</h1>}>
-      <Routes>
-        <Route path={routeConfig.auth} element={<Auth />} />
-
-        {/* Private routes */}
-        <Route
-          path={routeConfig.profile}
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Profile />
-            </PrivateRoute>
-          }
-        >
-          {' '}
-        </Route>
-        <Route
-          path={routeConfig.chat}
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <ChatInterface />
-            </PrivateRoute>
-          }
-        ></Route>
-
-        {/* Redirect to /auth for unknown paths */}
-        <Route path="*" element={<Navigate to={routeConfig.auth} />} />
-      </Routes>
+      {element}
     </Suspense>
   );
 };
