@@ -6,7 +6,6 @@ import { FormType } from '@/constant';
 import { Loader2 } from 'lucide-react';
 
 const AuthForm = ({ formik, currentFormType, isDisabled }) => {
-  
   const renderError = field => {
     return formik.touched[field] && formik.errors[field] ? (
       <span className="text-xs text-red-500">*{formik.errors[field]}</span>

@@ -16,8 +16,8 @@ export const ToastMessageKey = {
   NEW_FRIEND_ADDED: 'Friend added successfully',
   FAILED_TO_ADD_USER_IN_FRIENDLIST: 'Failed to add friend. Please try again.',
   FRIEND_REQUEST_FETCHED: 'Friend requests fetched successfully!',
-  FAILED_TO_UPDATE_FRIEND_REQUEST:"Failed to update friend request!",
-  FRIEND_REQUEST_ACCESPTED:'Friend request accespted '
+  FAILED_TO_UPDATE_FRIEND_REQUEST: 'Failed to update friend request!',
+  FRIEND_REQUEST_ACCESPTED: 'Friend request accespted ',
 };
 
 export const SCROLL_BEHAVIOR = 'smooth';

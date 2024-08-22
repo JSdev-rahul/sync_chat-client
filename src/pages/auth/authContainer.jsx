@@ -1,6 +1,7 @@
-import { loginImage } from "@/assets";
-import { FormType } from "@/constant";
-import React from "react";
+import React from 'react';
+
+import { loginImage } from '@/assets';
+import { FormType } from '@/constant';
 
 const AuthContainer = ({ children }) => {
   return (
@@ -13,6 +14,6 @@ const AuthContainer = ({ children }) => {
       </div>
     </div>
   );
-}
+};
 
-export default React.memo(AuthContainer)
+export default React.memo(AuthContainer);

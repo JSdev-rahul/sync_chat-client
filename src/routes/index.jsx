@@ -1,10 +1,10 @@
 // import { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 
-import PrivateRoute from './privateRoutes';
 import PublicRoute from './PublicRoute';
+import PrivateRoute from './privateRoutes';
 import { routeConfig } from './routes';
-import { lazy, Suspense } from 'react';
 
 // Lazy-loaded components
 const Profile = lazy(() => import('../pages/profile'));
@@ -48,11 +48,7 @@ const AppRoutes = ({ token }) => {
   // Use the useRoutes hook to generate the route elements
   const element = useRoutes(routes);
 
-  return (
-    <Suspense fallback={<h1>Loading...</h1>}>
-      {element}
-    </Suspense>
-  );
+  return <Suspense fallback={<h1>Loading...</h1>}>{element}</Suspense>;
 };
 
 export default AppRoutes;

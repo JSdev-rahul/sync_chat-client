@@ -87,7 +87,7 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
   );
 
   const fetchFriendListHandler = useCallback(() => {
-    dispatch(friendsAsyncThunk.fetchFriendsList({friendListParams, userId }));
+    dispatch(friendsAsyncThunk.fetchFriendsList({ friendListParams, userId }));
   }, [userId, dispatch]);
 
   useOnMount(() => {
@@ -124,10 +124,9 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
         <FriendsList setSelectedUser={setSelectedUser} />
 
         <div>
-        <Logout />
+          <Logout />
         </div>
       </div>
-     
     </>
   );
 });

@@ -1,4 +1,4 @@
-import { victorySvg } from "@/assets";
+import { victorySvg } from '@/assets';
 
 export const AuthHeader = () => {
   return (

@@ -16,11 +16,11 @@ import { updateProfileReducer } from '@/redux/slice/auth.slice';
 import { routeConfig } from '@/routes/routes';
 import { useFormik } from 'formik';
 
-// Validation
-import { userProfileValidation } from '../../validation/profile.validation.js';
 import { objectToFormData } from '../../utils/formData.js';
 // Utilities
 import { showErrorToast, showSuccessToast } from '../../utils/toaster.jsx';
+// Validation
+import { userProfileValidation } from '../../validation/profile.validation.js';
 
 // Components
 import ProfileDetails from './ProfileDetails.jsx';

@@ -34,7 +34,7 @@ const FriendRequestList = ({
         fetchFriendListHandler();
         showSuccessToast(ToastMessageKey.FRIEND_REQUEST_ACCESPTED);
       })
-      .catch(()=> {
+      .catch(() => {
         showErrorToast(ToastMessageKey.FAILED_TO_UPDATE_FRIEND_REQUEST);
       });
   };

@@ -16,9 +16,9 @@ import { showErrorToast, showSuccessToast } from '../../utils/toaster';
 // Validation
 import { loginValidation, signUpVlidation } from '../../validation/auth.validation';
 
+import AuthContainer from './authContainer';
 import { AuthHeader } from './authHeader';
 import { AuthTabs } from './authTabs';
-import AuthContainer from './authContainer';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -34,6 +34,7 @@ const Auth = () => {
   });
 
   const handleSubmit = values => {
+    setIsDisabled(true);
     const dispatchType =
       currentFormType === FormType.LOGIN
         ? authAsyncThunk.loginAsyncThunk
@@ -72,19 +73,22 @@ const Auth = () => {
     },
   });
 
-  const authTabs = useMemo(() => (
-    <AuthTabs
-      currentFormType={currentFormType}
-      setCurrentFormType={setCurrentFormType}
-      formik={formik}
-      isDisabled={isDisabled}
-    />
-  ), [currentFormType, formik, isDisabled]);
+  const authTabs = useMemo(
+    () => (
+      <AuthTabs
+        currentFormType={currentFormType}
+        setCurrentFormType={setCurrentFormType}
+        formik={formik}
+        isDisabled={isDisabled}
+      />
+    ),
+    [currentFormType, formik, isDisabled],
+  );
 
   return (
     <AuthContainer>
       <AuthHeader />
-        {authTabs}
+      {authTabs}
     </AuthContainer>
   );
 };

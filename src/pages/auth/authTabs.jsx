@@ -2,9 +2,10 @@ import React from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FormType } from '@/constant';
+
 import AuthForm from './authForm';
 
-export const AuthTabs = ({ formik, isDisabled, setCurrentFormType,currentFormType }) => {
+export const AuthTabs = ({ formik, isDisabled, setCurrentFormType, currentFormType }) => {
   return (
     <div className="flex items-center justify-center w-full">
       <Tabs className="w-3/4" defaultValue={FormType.LOGIN}>
