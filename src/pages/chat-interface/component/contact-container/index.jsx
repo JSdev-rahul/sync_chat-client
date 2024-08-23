@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 
 import { Button } from '@/components/ui/button';
 import { ToastMessageKey } from '@/constant';
+import { useChatInterfaceContext } from '@/context/PageContext';
 import { useOnMount } from '@/hooks/useOnMount';
 import { useUserDetails } from '@/hooks/useUserDetails';
 import { friendsAsyncThunk } from '@/redux/asyncThunk/friends.asyncThunk';
@@ -14,11 +14,10 @@ import Logo from '../Logo';
 import FriendRequestPage from './friendRequest';
 import { FriendsList } from './friendsList';
 import { Logout } from './logout';
-import { useChatInterfaceContext } from '@/context/PageContext';
+import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 
 const ContactContainer = React.memo(() => {
-
-  const {setSelectedUser}=useChatInterfaceContext()
+  const { setSelectedUser } = useChatInterfaceContext();
 
   const dispatch = useDispatch();
   const { user } = useUserDetails();
@@ -34,36 +33,35 @@ const ContactContainer = React.memo(() => {
     limit: 10,
   });
 
-  const fetchUsers = useCallback(() => {
+  const fetchUsers = () => {
     dispatch(friendsAsyncThunk.searchFriends({ params: searchUserParams }))
       .unwrap()
       .then(res => {
-        const data = res.data.filter(item => item.id != userId);
+        const data = res.data.filter(item => item?.id != userId);
         setUsers(data);
       })
       .catch(err => {
         showErrorToast(err?.message);
       });
-  }, [searchUserParams, userId]);
+  };
 
   useEffect(() => {
-    if (searchUserParams.q) {
+    if (searchUserParams?.q?.length >= 1) {
       fetchUsers();
     }
-  }, [searchUserParams.q]);
+  }, [searchUserParams]);
 
-  const handleOnSearch = useCallback(query => {
+  const handleOnSearch = query => {
     setSearchUserParams({ ...searchUserParams, q: query });
-  }, []);
+  };
 
-  const formatResult = (data)=> {
-    const { userName, email = '' } = data;
+  const formatResult = data => {
+    const { name, email, id = '' } = data;
     return (
+     
       <div className="flex items-center justify-between">
         <div className="flex flex-col cursor-pointer">
-          <span className="text-lg font-semibold">
-            {userName}
-          </span>
+          <span className="text-lg font-semibold">{name}</span>
           <span className="text-sm text-gray-500">{email}</span>
         </div>
         <div className="mr-4">
@@ -74,30 +72,27 @@ const ContactContainer = React.memo(() => {
       </div>
     );
   };
+  console.log('users', users);
+  const handleOnSelect = item => {
+    dispatch(friendsAsyncThunk.addFriend({ userId, friends: [item?.id] }))
+      .unwrap()
+      .then(() => {
+        // fetchFriendListHandler();
+        showSuccessToast(ToastMessageKey.NEW_FRIEND_ADDED);
+      })
+      .catch(err => {
+        console.log('err', err);
+        showErrorToast(ToastMessageKey.FAILED_TO_ADD_USER_IN_FRIENDLIST);
+      });
+  };
 
-  const handleOnSelect = useCallback(
-    item => {
-      dispatch(friendsAsyncThunk.addFriend({ userId, friends: [item?.id] }))
-        .unwrap()
-        .then(() => {
-          fetchFriendListHandler();
-          showSuccessToast(ToastMessageKey.NEW_FRIEND_ADDED);
-        })
-        .catch(() => {
-          showErrorToast(ToastMessageKey.FAILED_TO_ADD_USER_IN_FRIENDLIST);
-        });
-    },
-    [dispatch, userId],
-  );
-
-  const fetchFriendListHandler = useCallback(() => {
+  const fetchFriendListHandler = () => {
     dispatch(friendsAsyncThunk.fetchFriendsList({ friendListParams, userId }));
-  }, [userId, dispatch]);
+  };
 
   useOnMount(() => {
     fetchFriendListHandler();
   });
-
 
   return (
     <>
@@ -119,22 +114,22 @@ const ContactContainer = React.memo(() => {
             onSearch={handleOnSearch}
             onSelect={handleOnSelect}
             formatResult={formatResult}
-            fuseOptions={{ keys: ["userName","email"] }}
+            fuseOptions={{ keys: ['name','email'] }}
             placeholder="Search user by name or email"
             styling={{
-              height: "38px",
-              border: "1px solid darkgreen",
-              borderRadius: "20px",
-              backgroundColor: "white",
-              boxShadow: "none",
-              hoverBackgroundColor: "none",
-              color: "darkgreen",
-              fontSize: "16px",
+              height: '38px',
+              border: '1px solid darkgreen',
+              borderRadius: '20px',
+              backgroundColor: 'white',
+              boxShadow: 'none',
+              hoverBackgroundColor: 'none',
+              color: 'darkgreen',
+              fontSize: '16px',
               // fontFamily: "Courier",
-              iconColor: "black",
-              lineColor: "black",
-              placeholderColor: "black",
-              clearIconMargin: "3px 8px 3px 0",
+              iconColor: 'black',
+              lineColor: 'black',
+              placeholderColor: 'black',
+              clearIconMargin: '3px 8px 3px 0',
               zIndex: 0,
             }}
           />
