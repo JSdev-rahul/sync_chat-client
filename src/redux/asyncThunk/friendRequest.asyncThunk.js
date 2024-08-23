@@ -9,7 +9,8 @@ class FriendRequestAsyncThunk {
   fetchFriendRequest = createAsyncThunk(
     'friendRequest/fetchList',
     async (payload, { rejectWithValue }) => {
-      const { userId, params } = payload;
+      const { userId, friendRequestFilters } = payload;
+      const params = friendRequestFilters;
       try {
         const endPoint = replaceUrl(API_ENDPOINT.GET_ALL_FRIEND_REQUEST, {
           userId,

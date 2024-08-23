@@ -77,7 +77,7 @@ const ContactContainer = React.memo(() => {
     dispatch(friendsAsyncThunk.addFriend({ userId, friends: [item?.id] }))
       .unwrap()
       .then(() => {
-        // fetchFriendListHandler();
+        fetchFriendListHandler();
         showSuccessToast(ToastMessageKey.NEW_FRIEND_ADDED);
       })
       .catch(err => {
