@@ -1,6 +1,8 @@
+import { useChatInterfaceContext } from '@/context/PageContext';
 import React from 'react';
 
-const ChatBoxHeader = ({ selectedUser }) => {
+const ChatBoxHeader = () => {
+  const {selectedUser}=useChatInterfaceContext()
   const { userName = '', lastSeen, email } = selectedUser;
   return (
     <div className="text-white text-2xl pl-2 pt-2 font-semibold mb-4 border-b-2 border-white rounded-2xl fixed z-50 bg-gray-800  sm:w-[77%] md:w-[65%] lg:w-[77%]">

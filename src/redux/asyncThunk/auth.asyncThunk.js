@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import ApiClient from '../../lib/api-client';
+import apiClient from '../../lib/api-client';
 import API_ENDPOINT from '../../lib/api-constants';
 import { replaceUrl } from '../constant/redux.constant';
 
@@ -8,7 +8,7 @@ class AuthAsyncThunk {
   signUpAsyncThunk = createAsyncThunk('auth/signUp', async (payload, { rejectWithValue }) => {
     try {
       const endPoint = API_ENDPOINT.SIGNUP;
-      const response = await ApiClient.post(endPoint, payload);
+      const response = await apiClient.post(endPoint, payload);
       return response;
     } catch (err) {
       return rejectWithValue(err);
@@ -16,7 +16,7 @@ class AuthAsyncThunk {
   });
   loginAsyncThunk = createAsyncThunk('auth/login', async (payload, { rejectWithValue }) => {
     try {
-      const response = await ApiClient.post(API_ENDPOINT.LOGIN, payload);
+      const response = await apiClient.post(API_ENDPOINT.LOGIN, payload);
       return response.data; // Assuming response.data contains the user data and tokens
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -27,7 +27,7 @@ class AuthAsyncThunk {
 
     try {
       const endPoint = replaceUrl(API_ENDPOINT.LOGOUT, { userId });
-      const response = await ApiClient.post(endPoint);
+      const response = await apiClient.post(endPoint);
       return response.data; // Assuming response.data contains the user data and tokens
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -37,7 +37,7 @@ class AuthAsyncThunk {
     'profile/create',
     async (payload, { rejectWithValue }) => {
       try {
-        const response = await ApiClient.post(API_ENDPOINT.CREATE_PROFILE, payload);
+        const response = await apiClient.post(API_ENDPOINT.CREATE_PROFILE, payload);
         return response.data; // Assuming response.data contains the profile data
       } catch (err) {
         return rejectWithValue(err.response.data);

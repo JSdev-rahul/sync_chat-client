@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { BUTTON_LABELS } from '@/constant';
 import { useUserDetails } from '@/hooks/useUserDetails';
 
 const ProfileDetails = ({ formik, isDisabled }) => {
@@ -63,7 +64,7 @@ const ProfileDetails = ({ formik, isDisabled }) => {
       </div>
 
       <Button disabled={isDisabled} type="submit" className="rounded-full p-6 w-full">
-        {isDisabled ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Submit
+        {isDisabled && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} {BUTTON_LABELS.SUBMIT}
       </Button>
     </div>
   );

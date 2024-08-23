@@ -14,8 +14,12 @@ import Logo from '../Logo';
 import FriendRequestPage from './friendRequest';
 import { FriendsList } from './friendsList';
 import { Logout } from './logout';
+import { useChatInterfaceContext } from '@/context/PageContext';
 
-const ContactContainer = React.memo(({ setSelectedUser }) => {
+const ContactContainer = React.memo(() => {
+
+  const {setSelectedUser}=useChatInterfaceContext()
+
   const dispatch = useDispatch();
   const { user } = useUserDetails();
   const userId = user?._id;
@@ -131,12 +135,11 @@ const ContactContainer = React.memo(({ setSelectedUser }) => {
               lineColor: "black",
               placeholderColor: "black",
               clearIconMargin: "3px 8px 3px 0",
-              zIndex: 2,
+              zIndex: 0,
             }}
           />
         </div>
         <FriendsList setSelectedUser={setSelectedUser} />
-
         <div>
           <Logout />
         </div>

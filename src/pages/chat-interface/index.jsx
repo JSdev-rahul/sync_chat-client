@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ToastMessageKey } from '@/constant';
+import { ChatInterfaceContext } from '@/context/PageContext';
 import { useUserDetails } from '@/hooks/useUserDetails';
 import { updateFriendStatus } from '@/redux/slice/friendsList.slice';
 
@@ -26,7 +27,7 @@ const ChatInterface = () => {
 
   useEffect(() => {
     socket.current.on('onlineStatus', data => {
-      console.log("@@@ onlineStatus",data);
+      console.log('@@@ onlineStatus', data);
       dispatch(updateFriendStatus(data));
     });
   }, [socket]);
@@ -85,38 +86,48 @@ const ChatInterface = () => {
     }
   }, [socket, receiverId]);
 
+  const contextValue = useMemo(
+    () => ({
+      setSelectedUser,
+      selectedUser,
+      Allmessages,
+    }),
+    [Allmessages, selectedUser],
+  );
+
   return (
-    <div className="grid grid-cols-[auto_1fr] bg-gradient-to-r from-indigo-500  h-screen p-6">
-      {/* Sidebar */}
-      <div className="bg-gray-800 border-r-2 border-gray-600 rounded-3xl h-full">
-        <div className="p-4 h-full">
-          <ContactContainer {...{ setSelectedUser }} />
-        </div>
-      </div>
-
-      {/* Chat Area */}
-      <div className="flex flex-col gap-3 overflow-hidden h-full w-auto ml-2">
-        {/* Header */}
-        {selectedUser && (
-          <div className="flex-none overflow-hidden mb-2 rounded-2xl">
-            <ChatBoxHeader selectedUser={selectedUser} />
+    <ChatInterfaceContext.Provider value={contextValue}>
+      <div className="grid grid-cols-[auto_1fr] bg-gradient-to-r from-indigo-500  h-screen p-6">
+        {/* Sidebar */}
+        <div className="bg-gray-800 border-r-2 border-gray-600 rounded-3xl h-full">
+          <div className="p-4 h-full">
+            <ContactContainer />
           </div>
-        )}
-
-        {/* Messages */}
-        <div className="flex-grow overflow-y-hidden">
-          {selectedUser ? (
-            <ChatContainer {...{ selectedUser, Allmessages }} />
-          ) : (
-            <EmptyChatContainer />
-          )}
         </div>
 
-        {/* Input Area */}
-        <div className="flex-none">{/* Place your input component here */}</div>
+        {/* Chat Area */}
+        <div className="flex flex-col gap-3 overflow-hidden h-full w-auto ml-2">
+          {/* Header */}
+          {selectedUser && (
+            <div className="flex-none overflow-hidden mb-2 rounded-2xl">
+              <ChatBoxHeader />
+            </div>
+          )}
+
+          {/* Messages */}
+          <div className="flex-grow overflow-y-hidden">
+            {selectedUser ? (
+              <ChatContainer />
+            ) : (
+              <EmptyChatContainer />
+            )}
+          </div>
+
+          {/* Input Area */}
+          <div className="flex-none">{/* Place your input component here */}</div>
+        </div>
       </div>
-    </div>
-    
+    </ChatInterfaceContext.Provider>
   );
 };
 

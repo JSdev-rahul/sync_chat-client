@@ -5,7 +5,7 @@ export const FriendsList = ({ setSelectedUser }) => {
 
   return (
     friendsList &&
-    friendsList.map((contact, index) => {
+    friendsList?.map((contact, index) => {
       const { userName, email, isOnline } = contact?.friendDetails;
       return (
         <div

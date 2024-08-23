@@ -3,10 +3,14 @@ import { TiDeleteOutline } from 'react-icons/ti';
 import InputEmoji from 'react-input-emoji';
 
 import { Button } from '@/components/ui/button';
+import { BUTTON_LABELS } from '@/constant';
+import { useChatContainerContext } from '@/context/PageContext';
 import { useSocket } from '@/context/SocketContext';
 import { useUserDetails } from '@/hooks/useUserDetails';
 
-const MessageActionBar = ({ editMessageData, setEditMessageData, selectedUser }) => {
+const MessageActionBar = () => {
+  const { editMessageData, setEditMessageData, selectedUser } = useChatContainerContext();
+
   const [message, setMessage] = useState('');
   const socket = useSocket();
   const { user } = useUserDetails();
@@ -59,7 +63,7 @@ const MessageActionBar = ({ editMessageData, setEditMessageData, selectedUser })
         onClick={() => handleMessageAction()}
         className="p-2 px-4 bg-blue-600 text-white rounded"
       >
-        {editMessageData ? 'Edit message' : 'Send Message'}
+        {editMessageData ? BUTTON_LABELS.EDIT : BUTTON_LABELS.SEND}
       </Button>
     </div>
   );

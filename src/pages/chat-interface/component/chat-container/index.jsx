@@ -2,12 +2,16 @@ import React, { useRef, useEffect, useCallback, useMemo, useState } from 'react'
 import { MdDoNotDisturbAlt, MdOutlineDelete, MdOutlineEdit } from 'react-icons/md';
 
 import { MessageType, SCROLL_BEHAVIOR } from '@/constant';
+import { ChatContainerContext, useChatInterfaceContext } from '@/context/PageContext';
 import { useSocket } from '@/context/SocketContext';
 import { useUserDetails } from '@/hooks/useUserDetails';
 import dateFormatter from '@/utils/dateFromatter';
+
 import MessageActionBar from './messageActionBar';
 
-const ChatContainer = ({ Allmessages, selectedUser }) => {
+const ChatContainer = () => {
+  const { selectedUser, Allmessages } = useChatInterfaceContext();
+
   const [editMessageData, setEditMessageData] = useState('');
   const endOfMessagesRef = useRef(null);
 
@@ -51,9 +55,7 @@ const ChatContainer = ({ Allmessages, selectedUser }) => {
               <div className="text-sm flex justify-between items-center">
                 <div className="flex justify-center items-center gap-5">
                   <div>
-                    {msg.isDeletedBySender && (
-                      <MdDoNotDisturbAlt className="text-lg text-center" />
-                    )}
+                    {msg.isDeletedBySender && <MdDoNotDisturbAlt className="text-lg text-center" />}
                   </div>
                   <div>{msg.content}</div>
                 </div>
@@ -89,21 +91,26 @@ const ChatContainer = ({ Allmessages, selectedUser }) => {
     [Allmessages],
   );
 
+  const contextValue = useMemo(
+    () => ({
+      editMessageData,
+      setEditMessageData,
+      selectedUser,
+    }),
+    [editMessageData, selectedUser],
+  );
+
   return (
     <>
       <div className="flex flex-col h-full">
         <div className="flex-1 overflow-y-auto p-4 bg-gray-900 mt-16 mb-9 rounded-3xl">
           {renderedMessages}
-          <div ref={endOfMessagesRef} /> {/* Empty div to act as a scroll target */}
+          <div ref={endOfMessagesRef} />
         </div>
         <div className="relative bg-gray-800 p-4 rounded-b-3xl">
-          <MessageActionBar
-            {...{
-              editMessageData,
-              setEditMessageData,
-              selectedUser,
-            }}
-          />
+          <ChatContainerContext.Provider value={contextValue}>
+            <MessageActionBar />
+          </ChatContainerContext.Provider>
         </div>
       </div>
     </>

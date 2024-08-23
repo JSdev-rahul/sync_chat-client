@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import ApiClient from '../../lib/api-client';
+import apiClient from '../../lib/api-client';
 import API_ENDPOINT from '../../lib/api-constants';
 import { replaceUrl } from '../constant/redux.constant';
 
@@ -10,7 +10,7 @@ class FriendsAsyncThunk {
     const { params, userId } = payload;
     try {
       const endPoint = replaceUrl(API_ENDPOINT.GET_FRIENDS_LIST, { userId });
-      const response = await ApiClient.get(endPoint, { params });
+      const response = await apiClient.get(endPoint, { params });
       return response.data; // Assuming response.data contains the list of friends
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -22,7 +22,7 @@ class FriendsAsyncThunk {
     try {
       const { params } = payload;
       console.log('pay', payload);
-      const response = await ApiClient.get(API_ENDPOINT.SEARCH_FRIENDS, {
+      const response = await apiClient.get(API_ENDPOINT.SEARCH_FRIENDS, {
         params,
       });
       return response.data; // Assuming response.data contains the search results
@@ -34,7 +34,7 @@ class FriendsAsyncThunk {
   // Add a new friend
   addFriend = createAsyncThunk('friends/add', async (payload, { rejectWithValue }) => {
     try {
-      const response = await ApiClient.post(API_ENDPOINT.ADD_FRIEND, payload);
+      const response = await apiClient.post(API_ENDPOINT.ADD_FRIEND, payload);
       return response.data; // Assuming response.data contains the updated friends list
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);

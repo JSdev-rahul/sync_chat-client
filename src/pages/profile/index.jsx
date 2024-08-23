@@ -1,15 +1,12 @@
-// React and Hooks
 import React, { useState } from 'react';
-// Redux and Thunks
 import { useDispatch } from 'react-redux';
-// Routing
+
 import { useNavigate } from 'react-router-dom';
 
-// Assets
 import { victorySvg } from '@/assets';
-// Constants
+
 import { ToastMessageKey } from '@/constant/index.js';
-// Hooks
+
 import { useUserDetails } from '@/hooks/useUserDetails.jsx';
 import { authAsyncThunk } from '@/redux/asyncThunk/auth.asyncThunk';
 import { updateProfileReducer } from '@/redux/slice/auth.slice';
@@ -17,12 +14,11 @@ import { routeConfig } from '@/routes/routes';
 import { useFormik } from 'formik';
 
 import { objectToFormData } from '../../utils/formData.js';
-// Utilities
+
 import { showErrorToast, showSuccessToast } from '../../utils/toaster.jsx';
-// Validation
+
 import { userProfileValidation } from '../../validation/profile.validation.js';
 
-// Components
 import ProfileDetails from './ProfileDetails.jsx';
 
 const BASE_URL = import.meta.env.VITE_STATIC_IMAGE_BASE_URL;

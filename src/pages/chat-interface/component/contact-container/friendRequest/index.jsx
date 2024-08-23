@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { FriendRequestType, ToastMessageKey } from '@/constant';
+import { FriendListRequestContext } from '@/context/PageContext';
 import { useUserDetails } from '@/hooks/useUserDetails';
 import { friendRequestAsyncThunk } from '@/redux/asyncThunk/friendRequest.asyncThunk';
 import { delay } from '@/utils/delay';
@@ -18,11 +19,13 @@ const FriendRequestPage = ({ fetchFriendListHandler }) => {
   const [isLoading, setIsLoading] = useState('');
   const [friendsRequests, setFriendRequests] = useState([]);
 
-  const [params, setParams] = useState({ status: FriendRequestType.PENDING });
+  const [friendRequestFilters, setFriendRequestFilters] = useState({
+    status: FriendRequestType.PENDING,
+  });
 
   const fetchFriendRequests = useCallback(() => {
     setIsLoading(true);
-    dispatch(friendRequestAsyncThunk.fetchFriendRequest({ userId, params }))
+    dispatch(friendRequestAsyncThunk.fetchFriendRequest({ userId, friendRequestFilters }))
       .unwrap()
       .then(res => {
         setFriendRequests(res.data);
@@ -35,22 +38,29 @@ const FriendRequestPage = ({ fetchFriendListHandler }) => {
         await delay(3000);
         setIsLoading(false);
       });
-  }, [params]);
+  }, [friendRequestFilters]);
 
   useEffect(() => {
     fetchFriendRequests();
-  }, [params]);
+  }, [friendRequestFilters]);
+
+  const contextValue = useMemo(
+    () => ({
+      isLoading,
+      friendsRequests,
+      friendRequestFilters,
+      setFriendRequestFilters,
+      fetchFriendRequests,
+      fetchFriendListHandler,
+    }),
+    [isLoading, friendsRequests, friendRequestFilters],
+  );
 
   return (
     <>
-      <PopoverDemo
-        isLoading={isLoading}
-        friendsRequests={friendsRequests}
-        status={params.status}
-        setParams={setParams}
-        fetchFriendRequests={fetchFriendRequests}
-        fetchFriendListHandler={fetchFriendListHandler}
-      />
+      <FriendListRequestContext.Provider value={contextValue}>
+        <PopoverDemo />
+      </FriendListRequestContext.Provider>
     </>
   );
 };

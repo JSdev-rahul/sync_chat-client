@@ -3,9 +3,12 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FormType } from '@/constant';
+import { useAuthContext } from '@/context/PageContext';
 import { Loader2 } from 'lucide-react';
 
-const AuthForm = ({ formik, currentFormType, isDisabled }) => {
+const AuthForm = () => {
+  const { formik, isDisabled, currentFormType } = useAuthContext();
+
   const renderError = field => {
     return formik.touched[field] && formik.errors[field] ? (
       <span className="text-xs text-red-500">*{formik.errors[field]}</span>
@@ -76,7 +79,7 @@ const AuthForm = ({ formik, currentFormType, isDisabled }) => {
         )}
 
         <Button disabled={isDisabled} type="submit" className="rounded-full p-6 w-full">
-          {isDisabled ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} {currentFormType}
+          {isDisabled && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} {currentFormType}
         </Button>
       </div>
     </form>

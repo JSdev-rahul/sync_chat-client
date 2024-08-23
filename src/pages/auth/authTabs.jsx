@@ -2,10 +2,13 @@ import React from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FormType } from '@/constant';
+import { useAuthContext } from '@/context/PageContext';
 
 import AuthForm from './authForm';
 
-export const AuthTabs = ({ formik, isDisabled, setCurrentFormType, currentFormType }) => {
+export const AuthTabs = () => {
+  const { formik, isDisabled, setCurrentFormType, currentFormType } = useAuthContext();
+
   return (
     <div className="flex items-center justify-center w-full">
       <Tabs className="w-3/4" defaultValue={FormType.LOGIN}>
@@ -26,10 +29,10 @@ export const AuthTabs = ({ formik, isDisabled, setCurrentFormType, currentFormTy
           </TabsTrigger>
         </TabsList>
         <TabsContent value={FormType.LOGIN}>
-          <AuthForm formik={formik} currentFormType={currentFormType} isDisabled={isDisabled} />
+          <AuthForm />
         </TabsContent>
         <TabsContent value={FormType.SIGN_UP}>
-          <AuthForm formik={formik} currentFormType={currentFormType} isDisabled={isDisabled} />
+          <AuthForm />
         </TabsContent>
       </Tabs>
     </div>

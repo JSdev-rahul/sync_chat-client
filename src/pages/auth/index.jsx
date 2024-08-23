@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Constants
 import { FormType, ToastMessageKey } from '@/constant';
+import { AuthContext } from '@/context/PageContext';
 import { authAsyncThunk } from '@/redux/asyncThunk/auth.asyncThunk';
 import { routeConfig } from '@/routes/routes';
 import { useFormik } from 'formik';
@@ -28,7 +29,7 @@ const Auth = () => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const [formValues, setFormValues] = useState({
-    userName:"",
+    userName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -50,7 +51,7 @@ const Auth = () => {
       .unwrap()
       .then(() => {
         showSuccessToast(successMessage);
-          navigate(routeConfig.chat);
+        navigate(routeConfig.chat);
       })
       .catch(err => {
         const message = err.message || errorMessage;
@@ -70,23 +71,20 @@ const Auth = () => {
     },
   });
 
-  const authTabs = useMemo(
-    () => (
-      <AuthTabs
-        currentFormType={currentFormType}
-        setCurrentFormType={setCurrentFormType}
-        formik={formik}
-        isDisabled={isDisabled}
-      />
-    ),
-    [currentFormType, formik, isDisabled],
-  );
+  const contextValue = useMemo(() => ({
+      currentFormType,
+      setCurrentFormType,
+      formik,
+      isDisabled,
+    }), [currentFormType, formik],);
 
   return (
-    <AuthContainer>
-      <AuthHeader />
-      {authTabs}
-    </AuthContainer>
+    <AuthContext.Provider value={contextValue}>
+      <AuthContainer>
+        <AuthHeader />
+        <AuthTabs />
+      </AuthContainer>
+    </AuthContext.Provider>
   );
 };
 export default Auth;

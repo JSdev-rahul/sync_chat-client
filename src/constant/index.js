@@ -31,3 +31,9 @@ export const FriendRequestType = {
 export const MessageType = {
   EDITED: 'Edited',
 };
+
+export const BUTTON_LABELS = {
+  EDIT: 'Edit message',
+  SEND: 'Send Message',
+  SUBMIT: 'Submit',
+};
