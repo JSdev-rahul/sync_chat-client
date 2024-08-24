@@ -1,41 +1,29 @@
+import React, { useCallback } from 'react';
 import { FcCheckmark } from 'react-icons/fc';
 import { RxCross2 } from 'react-icons/rx';
-import { useDispatch } from 'react-redux';
 
-import { FriendRequestType, ToastMessageKey } from '@/constant';
+import { FriendRequestType } from '@/constant';
 import { useFriendListRequestContext } from '@/context/PageContext';
 import { useUserDetails } from '@/hooks/useUserDetails';
-import { friendRequestAsyncThunk } from '@/redux/asyncThunk/friendRequest.asyncThunk';
-import { showErrorToast, showSuccessToast } from '@/utils/toaster';
+import useOnUpdateFriendRequestStatus from '@/queries/useOnUpdateFriendRequestStatus';
+import { useOnAcceptFriendRequest } from '@/queries/useonAcceptFriensRequest';
 
 const FriendRequestList = () => {
-  const { friendsRequests, requestType, fetchFriendRequests, fetchFriendListHandler } = useFriendListRequestContext();
+  const { friendRequestFilters, friendsRequests } = useFriendListRequestContext();
+  const { userId } = useUserDetails();
 
-  const dispatch = useDispatch();
-  const { user } = useUserDetails();
-  const userId = user?._id;
-  const onUpdateFriendRequestStatus = (id, status = FriendRequestType.DECLINED) => {
-    dispatch(friendRequestAsyncThunk.updateFriendRequestStatus({ friendRequestId: id, status }))
-      .unwrap()
-      .then(() => {
-        fetchFriendRequests();
-      })
-      .catch(() => {
-        showErrorToast(ToastMessageKey.FAILED_TO_UPDATE_FRIEND_REQUEST);
-      });
-  };
-  const onAcceptFriendRequest = (friendId, friendReqeustId) => {
-    dispatch(friendRequestAsyncThunk.acceptFriendRequest({ userId, friends: [friendId] }))
-      .unwrap()
-      .then(() => {
-        onUpdateFriendRequestStatus(friendReqeustId, FriendRequestType.ACCEPTED);
-        fetchFriendListHandler();
-        showSuccessToast(ToastMessageKey.FRIEND_REQUEST_ACCESPTED);
-      })
-      .catch(() => {
-        showErrorToast(ToastMessageKey.FAILED_TO_UPDATE_FRIEND_REQUEST);
-      });
-  };
+  const { mutate: onUpdateMutate } = useOnUpdateFriendRequestStatus();
+  const { mutate: onAcceptMutate } = useOnAcceptFriendRequest();
+
+  const onUpdateFriendRequestStatus = useCallback(
+    (friendRequestId, status = FriendRequestType.DECLINED) => {
+      onUpdateMutate({ friendRequestId, status });
+    },
+    [],
+  );
+  const onAcceptFriendRequest = useCallback((friendId, friendRequestId) => {
+    onAcceptMutate({ userId, friends: [friendId], friendRequestId });
+  }, []);
 
   return friendsRequests?.map(item => {
     const { userName, email, _id } = item?.friendRequestDetails;
@@ -55,7 +43,7 @@ const FriendRequestList = () => {
           <div className="bg-white rounded-full p-1 text-white shadow-2xl hover:scale-125">
             <FcCheckmark onClick={() => onAcceptFriendRequest(_id, item?._id)} />
           </div>
-          {requestType == FriendRequestType.PENDING && (
+          {friendRequestFilters.status == FriendRequestType.PENDING && (
             <div
               onClick={() => onUpdateFriendRequestStatus(item?._id)}
               className="bg-red-500 rounded-full p-1 text-white shadow-2xl hover:scale-125"
@@ -69,4 +57,4 @@ const FriendRequestList = () => {
   });
 };
 
-export default FriendRequestList;
+export default React.memo(FriendRequestList);

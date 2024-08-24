@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 
 import { Button } from '@/components/ui/button';
 import { ToastMessageKey } from '@/constant';
 import { useChatInterfaceContext } from '@/context/PageContext';
 import { useOnMount } from '@/hooks/useOnMount';
 import { useUserDetails } from '@/hooks/useUserDetails';
+import { useAddFriendMutation } from '@/queries/useAddFriend';
+import useFetchFriendList from '@/queries/useFetchFriendList';
+import { useOnAcceptFriendRequest } from '@/queries/useonAcceptFriensRequest';
 import { friendsAsyncThunk } from '@/redux/asyncThunk/friends.asyncThunk';
 
 import { showErrorToast, showSuccessToast } from '../../../../utils/toaster';
@@ -14,20 +18,14 @@ import Logo from '../Logo';
 import FriendRequestPage from './friendRequest';
 import { FriendsList } from './friendsList';
 import { Logout } from './logout';
-import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 
 const ContactContainer = React.memo(() => {
   const { setSelectedUser } = useChatInterfaceContext();
-
+  const { mutate:addAddFiendMutate } = useAddFriendMutation();
   const dispatch = useDispatch();
-  const { user } = useUserDetails();
-  const userId = user?._id;
+  const { user,userId } = useUserDetails();
   const [users, setUsers] = useState([]);
 
-  const [friendListParams, setFriendListParams] = useState({
-    page: 1,
-    limit: 5,
-  });
   const [searchUserParams, setSearchUserParams] = useState({
     q: '',
     limit: 10,
@@ -58,7 +56,6 @@ const ContactContainer = React.memo(() => {
   const formatResult = data => {
     const { name, email, id = '' } = data;
     return (
-     
       <div className="flex items-center justify-between">
         <div className="flex flex-col cursor-pointer">
           <span className="text-lg font-semibold">{name}</span>
@@ -72,27 +69,11 @@ const ContactContainer = React.memo(() => {
       </div>
     );
   };
-  console.log('users', users);
+ 
   const handleOnSelect = item => {
-    dispatch(friendsAsyncThunk.addFriend({ userId, friends: [item?.id] }))
-      .unwrap()
-      .then(() => {
-        fetchFriendListHandler();
-        showSuccessToast(ToastMessageKey.NEW_FRIEND_ADDED);
-      })
-      .catch(err => {
-        console.log('err', err);
-        showErrorToast(ToastMessageKey.FAILED_TO_ADD_USER_IN_FRIENDLIST);
-      });
+    const payload = { userId, friends: [item?.id] };
+    addAddFiendMutate({ payload });
   };
-
-  const fetchFriendListHandler = () => {
-    dispatch(friendsAsyncThunk.fetchFriendsList({ friendListParams, userId }));
-  };
-
-  useOnMount(() => {
-    fetchFriendListHandler();
-  });
 
   return (
     <>
@@ -101,7 +82,7 @@ const ContactContainer = React.memo(() => {
         <div className="flex flex-col justify-center">
           <h2 className="text-white flex justify-between text-lg font-semibold mb-4 mt-6  items-center space-x-4">
             <span># My Contacts</span>
-            <FriendRequestPage fetchFriendListHandler={fetchFriendListHandler} />
+            <FriendRequestPage />
           </h2>
           <span className="text-gray-300">{user?.email}</span>
         </div>
@@ -114,7 +95,7 @@ const ContactContainer = React.memo(() => {
             onSearch={handleOnSearch}
             onSelect={handleOnSelect}
             formatResult={formatResult}
-            fuseOptions={{ keys: ['name','email'] }}
+            fuseOptions={{ keys: ['name', 'email'] }}
             placeholder="Search user by name or email"
             styling={{
               height: '38px',

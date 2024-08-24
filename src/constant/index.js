@@ -28,6 +28,24 @@ export const FriendRequestType = {
   DECLINED: 'decline',
 };
 
+const TabsLable={
+  PENDING:"Pending",
+  DECLINED:'Decline'
+}
+
+export const FriendRequestTabs = [
+  {
+    label: TabsLable.PENDING,
+    status: FriendRequestType.PENDING,
+  },
+  {
+    label: TabsLable.DECLINED,
+    status: FriendRequestType.DECLINED,
+  },
+];
+
+
+
 export const MessageType = {
   EDITED: 'Edited',
 };

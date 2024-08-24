@@ -27,7 +27,6 @@ const ChatInterface = () => {
 
   useEffect(() => {
     socket.current.on('onlineStatus', data => {
-      console.log('@@@ onlineStatus', data);
       dispatch(updateFriendStatus(data));
     });
   }, [socket]);

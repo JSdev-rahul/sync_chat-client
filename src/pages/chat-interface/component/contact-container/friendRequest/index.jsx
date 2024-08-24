@@ -1,65 +1,36 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useMemo, useState } from 'react';
 
-import { FriendRequestType, ToastMessageKey } from '@/constant';
+import { FriendRequestType } from '@/constant';
 import { FriendListRequestContext } from '@/context/PageContext';
 import { useUserDetails } from '@/hooks/useUserDetails';
-import { friendRequestAsyncThunk } from '@/redux/asyncThunk/friendRequest.asyncThunk';
-import { delay } from '@/utils/delay';
+import useFetchFriendRequest from '@/queries/useFetchFriendRequest';
+import FriendRequestPopover from './friendRequestPopover';
 
-import { showErrorToast, showSuccessToast } from '../../../../../utils/toaster';
 
-import PopoverDemo from './popOver';
-
-const FriendRequestPage = ({ fetchFriendListHandler }) => {
-  const dispatch = useDispatch();
-  const { user } = useUserDetails();
-  const userId = user?._id;
-
-  const [isLoading, setIsLoading] = useState('');
-  const [friendsRequests, setFriendRequests] = useState([]);
+const FriendRequestPage = () => {
+  const { userId } = useUserDetails();
 
   const [friendRequestFilters, setFriendRequestFilters] = useState({
     status: FriendRequestType.PENDING,
   });
 
-  const fetchFriendRequests = useCallback(() => {
-    setIsLoading(true);
-    dispatch(friendRequestAsyncThunk.fetchFriendRequest({ userId, friendRequestFilters }))
-      .unwrap()
-      .then(res => {
-        setFriendRequests(res.data);
-        showSuccessToast(ToastMessageKey.FRIEND_REQUEST_FETCHED);
-      })
-      .catch(err => {
-        showErrorToast(err.message);
-      })
-      .finally(async () => {
-        await delay(3000);
-        setIsLoading(false);
-      });
-  }, [friendRequestFilters]);
-
-  useEffect(() => {
-    fetchFriendRequests();
-  }, [friendRequestFilters]);
+  const { isLoading, data: friendsRequests, refetch: refetchFriendRequests } = useFetchFriendRequest(userId, friendRequestFilters);
 
   const contextValue = useMemo(
     () => ({
       isLoading,
       friendsRequests,
-      friendRequestFilters,
       setFriendRequestFilters,
-      fetchFriendRequests,
-      fetchFriendListHandler,
+      friendRequestFilters,
+      refetchFriendRequests,
     }),
-    [isLoading, friendsRequests, friendRequestFilters],
+    [friendsRequests],
   );
 
   return (
     <>
       <FriendListRequestContext.Provider value={contextValue}>
-        <PopoverDemo />
+        <FriendRequestPopover />
       </FriendListRequestContext.Provider>
     </>
   );

@@ -1,11 +1,20 @@
 import { useSelector } from 'react-redux';
 
+import { useUserDetails } from '@/hooks/useUserDetails';
+import useFetchFriendList from '@/queries/useFetchFriendList';
+
 export const FriendsList = ({ setSelectedUser }) => {
-  const { friendsList } = useSelector(state => state.friendsList);
+
+  const { userId } = useUserDetails();
+  
+  const { isLoading, isSuccess, data } = useFetchFriendList(userId);
+  if(isLoading){
+    return <div>Loading...</div>
+  }
 
   return (
-    friendsList &&
-    friendsList?.map((contact, index) => {
+    data &&
+    data?.map((contact, index) => {
       const { userName, email, isOnline } = contact?.friendDetails;
       return (
         <div
